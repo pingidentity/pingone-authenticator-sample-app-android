@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation_graph"
+    app:startDestination="@id/authenticationFragment">
+
+    <fragment
+        android:id="@+id/biometricsAuthenticationFragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.BiometricsAuthenticationFragment"
+        android:label="BiometricsAuthenticationFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_biometricsAuthenticationFragment_to_timeoutFragment"
+            app:destination="@id/timeoutFragment"
+            app:popUpTo="@id/biometricsAuthenticationFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/authenticationFragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.AuthenticationFragment"
+        android:label="AuthenticationFragment" >
+        <action
+            android:id="@+id/action_authenticationFragment_to_biometricsAuthenticationFragment"
+            app:destination="@id/biometricsAuthenticationFragment"
+            app:popUpTo="@id/authenticationFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/timeoutFragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.TimeoutFragment"
+        android:label="fragment_timeout"
+        tools:layout="@layout/fragment_timeout" />
+</navigation>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true">
+        </action>
+        <action
+            android:id="@+id/action_splashFragment_to_camera2Fragment"
+            app:destination="@id/camera2Fragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_camera2Fragment2"
+            app:destination="@id/camera2Fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_camera2Fragment2_unpaired"
+            app:destination="@+id/camera2Fragment"
+            app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/camera2Fragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.Camera2Fragment"
+        android:label="fragment_camera2"
+        tools:layout="@layout/fragment_camera2">
+        <action
+            android:id="@+id/action_camera2Fragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@+id/main_navigation_graph"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+</navigation>

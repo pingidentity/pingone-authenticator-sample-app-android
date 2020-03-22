@@ -1,0 +1,104 @@
+apply plugin: 'com.android.application'
+/*
+ * The Google services plugin for Gradle loads the google-services.json file you have downloaded.
+ */
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'androidx.navigation.safeargs'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    lintOptions {
+        abortOnError false
+    }
+    defaultConfig {
+        /*
+         * Every Android app has a unique application ID that looks like a Java package name,
+         * such as com.example.myapp. This ID uniquely identifies your app on the device and
+         * in Google Play Store. If you want to upload a new version of your app, the application ID
+         * (and the certificate you sign it with) must be the same as the original APK
+         * if you change the application ID, Google Play Store treats the APK as a completely
+         * different app. So once you publish your app, you should never change the application ID.
+         */
+        applicationId "com.pingidentity.authenticatorsampleapp"
+        minSdkVersion 21
+        targetSdkVersion 29
+        /*
+         * versionCode is a positive integer so that other apps can programmatically evaluate it,
+         * for example to check an upgrade or downgrade relationship. You can set the value to any
+         * positive integer you want, however you should make sure that each successive release of
+         * your app uses a greater value. You cannot upload an APK to the Play Store with a
+         * versionCode you have already used for a previous version.
+         * Warning: The greatest value Google Play allows for versionCode is 2100000000.
+         * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
+         */
+        versionCode 1
+        /*
+         * versionName is a string so that you can describe the app version as a
+         * <major>.<minor>.<point> string, or as any other type of absolute or relative
+         * version identifier. The versionName has no purpose other than to be displayed to users.
+         */
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    //implementation project(':pingidsdkv2')
+
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'com.github.tony19:logback-android:2.0.0'
+
+    implementation 'com.madgag.spongycastle:core:1.58.0.0'
+    implementation 'com.madgag.spongycastle:bcpkix-jdk15on:1.58.0.0'
+
+    //FireCloud Messaging Services
+    implementation 'com.google.firebase:firebase-messaging:20.1.2'
+
+    /*
+     * The jose.4.j library is an open source (Apache 2.0) implementation of JWT and the JOSE
+     * specification suite
+     */
+    implementation 'org.bitbucket.b_c:jose4j:0.7.0'
+
+    //Google's gSon library to build and parse JSON format
+    implementation 'com.google.code.gson:gson:2.8.6'
+    //vision library for reading QR code
+    implementation 'com.google.android.gms:play-services-vision:19.0.0'
+
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.navigation:navigation-fragment:2.2.1'
+    implementation 'androidx.navigation:navigation-ui:2.2.1'
+    implementation "androidx.drawerlayout:drawerlayout:1.0.0"
+
+
+    /*
+     * To display a system prompt that requests the user to authenticate
+     * using biometric credentials, use the Biometric library.
+     */
+    implementation 'androidx.biometric:biometric:1.0.1'
+    implementation(group: 'com.an.biometric', name: 'biometric-auth', version: '0.1.0', ext: 'aar', classifier: '')
+
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}
