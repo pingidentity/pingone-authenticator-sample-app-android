@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">@color/colorGreyLight</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000</color>
+    <color name="colorGreyLight">#D3D3D3</color>
+
+    <color name="blueLight">#a8d4e9</color>
+    <color name="blue">#2996CC</color>
+    <color name="blue_darker">#2482c1</color>
+
+    <color name="redLight">#A31300</color>
+    <color name="yellowLight">#EEB91C</color>
+    <color name="greenLight">#4ABA78</color>
+    <color name="colorAlpha">#00FFFFFF</color>
+
+    <color name="layout_verifying_background_color">#FB6E7286</color>
+    <color name="layout_success_background_color">#FB4ABA78</color>
+    <color name="layout_invalid_background_color">#FBA31300</color>
+
+    <color name="side_menu_background_color">#F1F5F8</color>
+    <color name="slider_error_notification_background_color">#42474E</color>
+</resources>

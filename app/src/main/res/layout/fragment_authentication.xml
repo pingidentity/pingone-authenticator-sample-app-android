@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/headerBar"
+            style="@style/headerBar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:elevation="2dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <View
+                    android:id="@+id/placeholder_view"
+                    style="@style/headerBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+                <ImageView
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/placeholder_view"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/cd_bar_logo_image"
+                    android:src="@mipmap/logo_horizontal" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+        <ProgressBar
+            android:id="@+id/progress_bar_auth"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+        <LinearLayout
+            android:layout_below="@id/headerBar"
+            android:id="@+id/buttons_fallback_layout"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/auth_button_approve"
+                    style="@style/roundable_button_approve"
+                    android:text="@string/auth_view_button_approve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/auth_button_deny"
+                    style="@style/roundable_button_deny"
+                    android:text="@string/auth_view_button_deny"
+                    android:layout_marginTop="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include
+        layout="@layout/layout_auth_success"
+        android:id="@+id/layout_auth_success"
+        android:visibility="gone"/>
+
+    <include
+        layout="@layout/layout_auth_denied"
+        android:id="@+id/layout_auth_denied"
+        android:visibility="gone"/>
+
+    <include
+        layout="@layout/layout_auth_timeout"
+        android:id="@+id/layout_auth_timeout"
+        android:visibility="gone"/>
+
+</FrameLayout>

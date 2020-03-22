@@ -1,0 +1,54 @@
+<resources>
+
+    <!--Pairing screen-->
+
+    <string name="enable_button_text">Enable</string>
+    <string name="pairing_title">Pairing</string>
+    <string name="pairing_subtitle">To complete pairing, scan the QR code displayed in your browser, or enter the pairing key manually</string>
+    <string name="pairing_hint"><i>Pairing key</i></string>
+    <string name="pairing_button">Pair</string>
+
+    <string name="pairing_camera_permission_rationale">You must enable camera permission in order to scan.</string>
+    <string name="pairing_camera_button_enable">Enable</string>
+
+    <string name="pairing_layout_verifying_text">Verifying</string>
+    <string name="pairing_layout_paired_text">Paired</string>
+
+    <!-- Main Screen -->
+    <string name="main_view_accounts_title">Accounts</string>
+    <string name="main_view_new_button_text">New</string>
+    <string name="main_view_send_logs_title">Send Logs</string>
+    <string name="pop_up_logs_sent_message">Logs sent</string>
+    <string name="pop_up_logs_sent_positive_button">OK</string>
+    <string name="main_view_support_id_placeholder">Support ID: %s</string>
+    <string name="main_view_version_placeholder">V%s(000%d)</string>
+
+    <string name="main_screen_notification_no_network">No network</string>
+
+    <string name="auth_view_button_approve">Approve</string>
+    <string name="auth_view_button_deny">Deny</string>
+    <string name="auth_success_layout_message">Approved</string>
+    <string name="auth_denied_layout_message">Blocked</string>
+    <string name="auth_timeout_layout_message">Timed out</string>
+    <string name="auth_bio_layout_title">Authenticate to approve</string>
+    <string name="auth_dialog_fallback_button_title">Enter PIN</string>
+
+    <string name="notification_default_title">PingOne Authentication Request</string>
+    <string name="notification_default_subtitle">You have a new authentication request.</string>
+
+
+    <!--Content description used for automation testing-->
+    <string name="cd_logo_image" translatable="false">logo_image_cd</string>
+    <string name="cd_camera_image" translatable="false">camera_image_cd</string>
+    <string name="cd_spinner_image" translatable="false">spinner_image_cd</string>
+    <string name="cd_checkmark_image" translatable="false">checkmark_image_cd</string>
+    <string name="cd_invalid_image" translatable="false">invalid_image_cd</string>
+    <string name="cd_bar_logo_image" translatable="false">logotype_image_cd</string>
+
+    <string name="notifications_channel_name" translatable="false">PingOneNotificationsChannel</string>
+    <string name="notifications_channel_description" translatable="false">PingOneNotificationChannel</string>
+
+    <!-- PLACEHOLDERS -->
+    <string name="username_placeholder">User</string>
+
+</resources>
