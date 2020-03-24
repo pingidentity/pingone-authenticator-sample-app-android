@@ -11,16 +11,16 @@ This sample application demonstrates an authenticator-only application that uses
 
 ## Features
 
-  - Pairing flow using QR code with camera scan or manual entry.
+  - Pairing flow using QR code scannig or manual input.
   - Override usernames locally, or use names from PingOne directory.
-  - Authentication flow with push notifications using biometric recognition.
-  - Side menu with send logs option to track customer issues with support ID.
+  - Authentication flow with push notifications using biometric recognition to approve authentication.
+  - Send logs option to track customers issues with support ID.
 
 ## Prerequisites
 
 The Authenticator sample app requires Android Studio 3.5 or above to compile and run.
 
-To set up your application for  working with push messages in iOS refer to [PingOne mobile SDK iOS readMe].
+To set up your application for  working with push messages in Android refer to [PingOne mobile SDK iOS readMe].
 
 ## Installation
 
