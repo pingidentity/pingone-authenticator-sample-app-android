@@ -11,8 +11,8 @@ This sample application demonstrates an authenticator-only application that uses
 
 ## Features
 
-  - Pairing flow using QR code scannig or manual input.
-  - Override usernames locally, or use names from PingOne directory.
+  - Pairing flow using QR code scanning or manual input.
+  - Override user names locally, or use names from PingOne directory.
   - Authentication flow with push notifications using biometric recognition to approve authentication.
   - Send logs option to track customers issues with support ID.
 
@@ -52,8 +52,8 @@ android {
 4. Click on ```Sync Project with Gradle Files```. At this step you can build and run app.
 
 ## Customization
-1. Use built-in Asset Studio to import your own icon and owerwrite the placeholder.
-2. Owerwrite the following images:
+1. Use built-in Asset Studio to import your own icon and overwrite the placeholder.
+2. Overwrite the following images:
     * `app/src/main/res/mipmap-hdpi/logo_splash.png` for splash screen image.
     * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for logo in the navigation bar.
     ##### Note: 
