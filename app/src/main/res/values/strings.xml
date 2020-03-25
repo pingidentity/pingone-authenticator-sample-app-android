@@ -1,6 +1,7 @@
 <resources>
 
     <!--Pairing screen-->
+    <string name="app_name">Awesome Authenticator Application</string>
 
     <string name="enable_button_text">Enable</string>
     <string name="pairing_title">Pairing</string>
