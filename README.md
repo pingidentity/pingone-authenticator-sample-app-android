@@ -64,7 +64,7 @@ android {
 
 
 [Setup a mobile app]: <https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
-[Firebase project set-up guidelines]:<https://firebase.google.com/docs/android/setup?authuser=0#register-app/>
-[Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation/>
-[Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id/>
+[Firebase project set-up guidelines]:<https://firebase.google.com/docs/android/setup?authuser=0#register-app>
+[Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation>
+[Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id>
 [PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android/blob/master/README.md>
