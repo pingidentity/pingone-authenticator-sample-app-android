@@ -22,13 +22,13 @@ The Authenticator sample app requires Android Studio 3.6 or higher and Android S
 
 You should choose a **package name** for your application. A package name uniquely identifies your app on the device and in the Google Play Store. Generally, the package name of an app is in the format `com.example.myapp`, but it’s completely up to the developer to choose the name. *A package name is often referred to as an **applicationId***. For more information refer to [Android applicationId guidelines].
 
-To set up your application for work with push messages in Android refer to [Firebase project set-up guidelines]. You should register your Android application with package name you've choose and download ```google-services.json``` file when prompted. 
-This file will be needed for proper installation further.
+To set up your application for work with push messages in Android, refer to [Firebase project set-up guidelines]. You should register your Android application with the package name you choose, and download the ```google-services.json``` file when prompted. 
+This file will be needed in the installation
 
 ## Installation
 
-1. Clone this repository to Android Studio.
-2. Go to the **app/build.gradle** file and update the **applicationId** value with your package name. For example:
+1. Clone this repository in Android Studio.
+2. In the **app/build.gradle** file update the **applicationId** value with your package name. For example:
 ```java
 android {
     defaultConfig {
@@ -48,14 +48,14 @@ android {
     ...
 }
 ```
-3. Copy and paste ```google-services.json``` file received from Firebase into the ```app``` folder.
-4. Click on ```Sync Project with Gradle Files```. At this step you can build and run app.
+3. Copy and paste the ```google-services.json``` file received from Firebase into the ```app``` folder.
+4. Click on ```Sync Project with Gradle Files```. At this step you can build and run the app.
 
 ## Customization
-1. Use built-in Asset Studio to import your own icon and overwrite the placeholder.
+1. Use the built-in Asset Studio to import your own application icon and overwrite the placeholder with the name ```ic_launcher```.
 2. Overwrite the following images:
-    * `app/src/main/res/mipmap-hdpi/logo_splash.png` for splash screen image.
-    * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for logo in the navigation bar.
+    * `app/src/main/res/mipmap-hdpi/logo_splash.png` for the splash screen image.
+    * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for the logo in the navigation bar.
     ##### Note: 
     It is mandatory to replace these images before submitting the application to Google Play, in order to create a unique app complying with Google's restrictions. For more information, refer to [Google Play Impersonation and Intellectual Property Guidelines].
 
