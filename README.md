@@ -20,7 +20,7 @@ This sample application demonstrates an authenticator-only application that uses
 
 The Authenticator sample app requires Android Studio 3.6 or higher and Android SDK 29 to compile and run.
 
-You should choose a **package name** for your application. A package name uniquely identifies your app on the device and in the Google Play Store. *A package name is often referred to as an **applicationId***. For more information refer to [Android applicationId guidelines].
+You should choose a **package name** for your application. A package name uniquely identifies your app on the device and in the Google Play Store. Generally, the package name of an app is in the format `com.example.myapp`, but it’s completely up to the developer to choose the name. *A package name is often referred to as an **applicationId***. For more information refer to [Android applicationId guidelines].
 
 To set up your application for work with push messages in Android refer to [Firebase project set-up guidelines]. You should register your Android application with package name you've choose and download ```google-services.json``` file when prompted. 
 This file will be needed for proper installation further.
