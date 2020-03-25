@@ -18,26 +18,53 @@ This sample application demonstrates an authenticator-only application that uses
 
 ## Prerequisites
 
-The Authenticator sample app requires Android Studio 3.5 or above to compile and run.
+The Authenticator sample app requires Android Studio 3.6 or higher and Android SDK 29 to compile and run.
 
-To set up your application for  working with push messages in Android refer to [PingOne mobile SDK iOS readMe].
+You should choose a **package name** for your application. A package name uniquely identifies your app on the device and in the Google Play Store. *A package name is often referred to as an **applicationId***. For more information refer to [Android applicationId guidelines].
+
+To set up your application for work with push messages in Android refer to [Firebase project set-up guidelines]. You should register your Android application with package name you've choose and download ```google-services.json``` file when prompted. 
+This file will be needed for proper installation further.
 
 ## Installation
 
-1. Clone this repository to Android.
-2. Go to the **Target General** setting and update the **Display Name** and **Bundle Identifier** with your app's values.
-3. To update the UI, replace the following images in the `Assets.xcassets` folder:
-    - Splash screen image: `launch_image`
-    - Banner logo in navigation bar: `logo_navbar`
-    - App Icon: `AppIcon`
-    ##### Note: 
-    It is mandatory to replace these images before submitting the app to Google Play, in order to create a unique app complying with Google's restrictions. For more information, refer to [Google Play Impersonation and Intellectual Property Guidelines].
+1. Clone this repository to Android Studio.
+2. Go to the **app/build.gradle** file and update the **applicationId** value with your package name. For example:
+```java
+android {
+    defaultConfig {
+        applicationId "com.pingidentity.authenticatorsampleapp"
+        ...
+    }
+    ...
+}
+```
+should be changed to:
+```java
+android {
+    defaultConfig {
+        applicationId "com.example.myapp" //your package name
+        ...
+    }
+    ...
+}
+```
+3. Copy and paste ```google-services.json``` file received from Firebase into the ```app``` folder.
+4. Click on ```Sync Project with Gradle Files```. At this step you can build and run app.
 
-4. If needed, update the `Localizable.strings` file, to customize any string in the app.
-5. Build and run the project.
+## Customization
+1. Use built-in Asset Studio to import your own icon and owerwrite the placeholder.
+2. Owerwrite the following images:
+    * `app/src/main/res/mipmap-hdpi/logo_splash.png` for splash screen image.
+    * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for logo in the navigation bar.
+    ##### Note: 
+    It is mandatory to replace these images before submitting the application to Google Play, in order to create a unique app complying with Google's restrictions. For more information, refer to [Google Play Impersonation and Intellectual Property Guidelines].
+
+3. If needed, update the `app/src/main/res/values/strings.xml` file, to customize any string in the application.
 ##### Note: For further understanding the code implementation of this app, refer to [Setup a mobile app] using the PingOne SDK sample code.
 
 
-[Setup a mobile app]: <https://github.com/pingidentity/pingone-customers-mobile-sdk-ios>
+[Setup a mobile app]: <https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
+[Firebase project set-up guidelines]:<https://firebase.google.com/docs/android/setup?authuser=0#register-app/>
 [Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation/>
-[PingOne mobile SDK iOS readMe]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-ios/blob/master/README.md>
+[Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id/>
+[PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android/blob/master/README.md>
