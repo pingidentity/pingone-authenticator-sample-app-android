@@ -60,8 +60,6 @@ public class PreferencesManager {
     }
 
     public void storeUsersList(Context context, LinkedHashMap<String, Pair<String, String>> value){
-        String usersListAsJson = new Gson().toJson(value);
-        System.out.println(usersListAsJson);
         addEntry(context, USERS_LIST, new Gson().toJson(value));
     }
 
@@ -70,8 +68,6 @@ public class PreferencesManager {
         LinkedHashMap<String, Pair<String, String>> users;
         Type type = new TypeToken<LinkedHashMap<String, Pair<String, String>>>() {}.getType();
         users = new Gson().fromJson(usersListAsString, type);
-        System.out.println("USERS : " + users);
-
         return users;
     }
 }

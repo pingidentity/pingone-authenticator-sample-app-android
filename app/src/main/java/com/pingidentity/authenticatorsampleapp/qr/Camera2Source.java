@@ -41,7 +41,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -227,7 +226,6 @@ public class Camera2Source {
 
         mTextureView = textureView;
         if (mTextureView.isAvailable()){
-            System.out.println("AVAILABLE");
           try{
               if(!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                   throw new RuntimeException("Time out waiting to lock camera opening.");
@@ -289,11 +287,14 @@ public class Camera2Source {
               // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
               // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
               // garbage capture data.
-              Size[] outputSizes = sizeToSize(map.getOutputSizes(SurfaceTexture.class));
+              Size[] outputSizes = map.getOutputSizes(SurfaceTexture.class);
 
-              Size largest = getBestAspectPictureSize(map.getOutputSizes(ImageFormat.JPEG));
-
+              Size largest = getBestAspectPictureSize(outputSizes);
+              if (largest == null){
+                  largest = Collections.max(Arrays.asList(outputSizes), new CompareSizesByArea());;
+              }
               mPreviewSize = chooseOptimalSize(outputSizes, rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth, maxPreviewHeight, largest);
+
               // We fit the aspect ratio of TextureView to the size of preview we picked.
               int orientation = mDisplayOrientation;
               if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -312,7 +313,6 @@ public class Camera2Source {
               Log.e(TAG, "Error accessing camera2");
           }
         }else{
-            System.out.println("NOT AVAILABLE");
         }
         return this;
     }
@@ -416,12 +416,12 @@ public class Camera2Source {
                     mCaptureSession = cameraCaptureSession;
                     try {
                         // Auto focus should be continuous for camera preview.
-                        mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_AUTO);
+                        mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
 
                         // Finally, we start displaying the camera preview.
                         mPreviewRequest = mPreviewRequestBuilder.build();
                         mCaptureSession.setRepeatingRequest(mPreviewRequest, null, mBackgroundHandler);
-                    } catch (CameraAccessException e) {
+                    } catch (CameraAccessException | IllegalStateException e ) {
                         e.printStackTrace();
                     }
                 }
@@ -640,12 +640,58 @@ public class Camera2Source {
         return size.x;
     }
 
-    private Size[] sizeToSize(android.util.Size[] sizes) {
-        Size[] size = new Size[sizes.length];
-        for(int i=0; i<sizes.length; i++) {
-            size[i] = new Size(sizes[i].getWidth(), sizes[i].getHeight());
+    private Size getBestAspectPictureSize(Size[] supportedPictureSizes) {
+        float targetRatio = getScreenRatio(mContext);
+        Size bestSize = null;
+        TreeMap<Double, List<Size>> diffs = new TreeMap<>();
+
+        //Select supported sizes which ratio is less than ratioTolerance
+        for (Size size : supportedPictureSizes) {
+            float ratio = (float) size.getWidth() / size.getHeight();
+            double diff = Math.abs(ratio - targetRatio);
+            if (diff < ratioTolerance){
+                if (diffs.keySet().contains(diff)){
+                    //add the value to the list
+                    diffs.get(diff).add(size);
+                } else {
+                    List<Size> newList = new ArrayList<>();
+                    newList.add(size);
+                    diffs.put(diff, newList);
+                }
+            }
         }
-        return size;
+
+        //If no sizes were supported, (strange situation) establish a higher ratioTolerance
+        if(diffs.isEmpty()) {
+            for (Size size : supportedPictureSizes) {
+                float ratio = (float)size.getWidth() / size.getHeight();
+                double diff = Math.abs(ratio - targetRatio);
+                if (diff < maxRatioTolerance){
+                    if (diffs.keySet().contains(diff)){
+                        //add the value to the list
+                        diffs.get(diff).add(size);
+                    } else {
+                        List<Size> newList = new ArrayList<>();
+                        newList.add(size);
+                        diffs.put(diff, newList);
+                    }
+                }
+            }
+        }
+
+        //Select the highest resolution from the ratio filtered ones.
+        for (Map.Entry entry: diffs.entrySet()){
+            List<?> entries = (List) entry.getValue();
+            for (int i=0; i<entries.size(); i++) {
+                Size s = (Size) entries.get(i);
+                if(bestSize == null) {
+                    bestSize = new Size(s.getWidth(), s.getHeight());
+                } else if(bestSize.getWidth() < s.getWidth() || bestSize.getHeight() < s.getHeight()) {
+                    bestSize = new Size(s.getWidth(), s.getHeight());
+                }
+            }
+        }
+        return bestSize;
     }
 
     /**
@@ -696,62 +742,9 @@ public class Camera2Source {
         }
     }
 
-    private Size getBestAspectPictureSize(android.util.Size[] supportedPictureSizes) {
-        float targetRatio = getScreenRatio(mContext);
-        Size bestSize = null;
-        TreeMap<Double, List<Size>> diffs = new TreeMap<>();
-
-        //Select supported sizes which ratio is less than ratioTolerance
-        for (android.util.Size size : supportedPictureSizes) {
-            float ratio = (float) size.getWidth() / size.getHeight();
-            double diff = Math.abs(ratio - targetRatio);
-            if (diff < ratioTolerance){
-                if (diffs.keySet().contains(diff)){
-                    //add the value to the list
-                    Objects.requireNonNull(diffs.get(diff)).add(size);
-                } else {
-                    List<android.util.Size> newList = new ArrayList<>();
-                    newList.add(size);
-                    diffs.put(diff, newList);
-                }
-            }
-        }
-
-        //If no sizes were supported, (strange situation) establish a higher ratioTolerance
-        if(diffs.isEmpty()) {
-            for (android.util.Size size : supportedPictureSizes) {
-                float ratio = (float)size.getWidth() / size.getHeight();
-                double diff = Math.abs(ratio - targetRatio);
-                if (diff < maxRatioTolerance){
-                    if (diffs.keySet().contains(diff)){
-                        //add the value to the list
-                        Objects.requireNonNull(diffs.get(diff)).add(size);
-                    } else {
-                        List<android.util.Size> newList = new ArrayList<>();
-                        newList.add(size);
-                        diffs.put(diff, newList);
-                    }
-                }
-            }
-        }
-
-        //Select the highest resolution from the ratio filtered ones.
-        for (Map.Entry entry: diffs.entrySet()){
-            List<?> entries = (List) entry.getValue();
-            for (int i=0; i<entries.size(); i++) {
-                android.util.Size s = (android.util.Size) entries.get(i);
-                if(bestSize == null) {
-                    bestSize = new Size(s.getWidth(), s.getHeight());
-                } else if(bestSize.getWidth() < s.getWidth() || bestSize.getHeight() < s.getHeight()) {
-                    bestSize = new Size(s.getWidth(), s.getHeight());
-                }
-            }
-        }
-        return bestSize;
-    }
 
     /**
-     * Configures the necessary {@link android.graphics.Matrix} transformation to `mTextureView`.
+     * Configures the necessary {@link Matrix} transformation to `mTextureView`.
      * This method should be called after the camera preview size is determined in
      * setUpCameraOutputs and also the size of `mTextureView` is fixed.
      *

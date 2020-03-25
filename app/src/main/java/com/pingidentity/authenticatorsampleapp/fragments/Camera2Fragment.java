@@ -38,6 +38,7 @@ import androidx.navigation.Navigation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.MultiProcessor;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
@@ -51,13 +52,12 @@ import com.pingidentity.pingidsdkv2.PingOneSDKError;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Camera2Fragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class Camera2Fragment extends Fragment {
 
     private static final String TAG = "Camera2Fragment";
 
+    
     /*
      * permission request codes (need to be < 256)
      */
@@ -274,7 +274,9 @@ public class Camera2Fragment extends Fragment {
          * graphics for each barcode on screen.  The factory is used by the multi-processor to
          * create a separate tracker instance for each barcode.
          */
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(requireContext()).build();
+        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(requireContext())
+                .setBarcodeFormats(Barcode.QR_CODE)
+                .build();
         QrTrackerFactory barcodeFactory = new QrTrackerFactory(requireContext());
         barcodeDetector.setProcessor(new MultiProcessor.Builder<>(barcodeFactory).build());
 

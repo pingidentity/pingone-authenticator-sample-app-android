@@ -246,6 +246,9 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         if (localUsersArray.isEmpty() || !localUsersArray.containsKey(user.getId())){
             addRemoteUserToLocalBase(user);
         }else{
+            if(user.getUsername()==null){
+                user.setUsername(new User().new Username("", ""));
+            }
             user.getUsername().setGiven(Objects.requireNonNull(localUsersArray.get(user.getId())).first);
             user.setNickname(Objects.requireNonNull(localUsersArray.get(user.getId())).second);
         }
