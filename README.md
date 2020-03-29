@@ -52,7 +52,7 @@ android {
 4. Click on ```Sync Project with Gradle Files```. At this step you can build and run the app.
 
 ## Customization
-1. Use the built-in Asset Studio to import your own application icon and overwrite the placeholder with the name ```ic_launcher```.
+1. Use the built-in Asset Studio to import your own application icon and override the placeholder with the name ```ic_launcher```.
 2. Overwrite the following images:
     * `app/src/main/res/mipmap-hdpi/logo_splash.png` for the splash screen image.
     * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for the logo in the navigation bar.

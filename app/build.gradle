@@ -21,7 +21,7 @@ android {
          * if you change the application ID, Google Play Store treats the APK as a completely
          * different app. So once you publish your app, you should never change the application ID.
          */
-        applicationId "com.pingidentity.authenticatorsampleapp"
+        applicationId "com.pingidentity.authenticatorsampleapp"//todo mandatory to replace
         minSdkVersion 21
         targetSdkVersion 29
         /*
