@@ -12,19 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.vision.barcode.Barcode;
-import com.pingidentity.authenticatorsampleapp.qr.QrTracker;
-import com.pingidentity.authenticatorsampleapp.viewmodels.BarcodeViewModel;
 import com.pingidentity.authenticatorsampleapp.viewmodels.NetworkViewModel;
 
-public class MainActivity extends AppCompatActivity implements QrTracker.QrCodeUpdateListener {
+public class MainActivity extends AppCompatActivity {
 
     /*
      * view models separated by underlying fragments' logic
      * each used to communicate with corresponding fragment,
      * when activity is necessary
      */
-    private BarcodeViewModel barcodeViewModel;
+
     private NetworkViewModel networkViewModel;
 
     @Override
@@ -34,40 +31,20 @@ public class MainActivity extends AppCompatActivity implements QrTracker.QrCodeU
 
         setUpNetworkListeners();
 
-        barcodeViewModel = new ViewModelProvider(this).get(BarcodeViewModel.class);
         networkViewModel = new ViewModelProvider(this).get(NetworkViewModel.class);
 
-    }
-
-    @Override
-    public void onQrCodeDetected(final Barcode barcode) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                barcodeViewModel.updateBarcode(barcode.displayValue);
-            }
-        });
     }
 
     ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback(){
         @Override
         public void onAvailable(@NonNull Network network) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    networkViewModel.updateNetwork(true);
-                }
-            });
+            runOnUiThread(() -> networkViewModel.updateNetwork(true));
         }
 
         @Override
         public void onLost(@NonNull Network network) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    networkViewModel.updateNetwork(false);
-                }
-            });
+            runOnUiThread(() -> networkViewModel.updateNetwork(false));
+
         }
     };
 
