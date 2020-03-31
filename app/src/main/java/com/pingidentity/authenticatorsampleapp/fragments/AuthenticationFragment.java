@@ -69,7 +69,7 @@ public class AuthenticationFragment extends Fragment {
             progressBar = view.findViewById(R.id.progress_bar_auth);
 
             showFallbackLayout(view);
-            setTimer(notificationObject.getRemainingTime());
+            setTimer(notificationObject.getTimeoutDuration());
 
         }
     }

@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:contentDescription="@string/cd_logo_image"
         android:id="@+id/splash_image_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

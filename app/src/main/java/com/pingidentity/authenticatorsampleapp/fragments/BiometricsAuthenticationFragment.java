@@ -67,7 +67,7 @@ public class BiometricsAuthenticationFragment extends Fragment {
         layoutTimeout = view.findViewById(R.id.layout_auth_timeout);
         progressBar = view.findViewById(R.id.progress_bar_auth);
 
-        setTimer(notificationObject.getRemainingTime());
+        setTimer(notificationObject.getTimeoutDuration());
         view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -105,7 +105,6 @@ public class BiometricsAuthenticationFragment extends Fragment {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                System.out.println("ERROR " + errorCode + " " + errString);
                 switch (errorCode) {
                     //the user pressed PIN-fallback button
                     case BiometricConstants.ERROR_NEGATIVE_BUTTON:

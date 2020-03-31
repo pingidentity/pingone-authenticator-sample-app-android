@@ -1,12 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowLightStatusBar">true</item>
 
     </style>
+
+    <style name="headerBar">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:actionBarSize">80dp</item>
+    </style>
+
+    <style name="button">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginEnd">25dp</item>
+        <item name="android:layout_marginStart">25dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="roundable_button" parent="button">
+        <item name="android:background">@drawable/roundable_button_blue</item>
+        <item name="android:textColor">@color/blueLight</item>
+    </style>
+    <style name="roundable_button_approve" parent="button">
+        <item name="android:background">@drawable/roundable_button_green</item>
+        <item name="android:textColor">@color/greenLight</item>
+    </style>
+    <style name="roundable_button_deny" parent="button">
+        <item name="android:background">@drawable/roundable_button_red</item>
+        <item name="android:textColor">@color/redLight</item>
+    </style>
+
+    <style name="textAppearanceErrorStyle" parent="@android:style/TextAppearance">
+        <item name="android:background">@color/biometric_error_color</item>
+        <item name="android:padding">@dimen/error_area_padding</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/error_area_text_size</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="textAppearanceNotificationStyle" parent="@android:style/TextAppearance">
+        <item name="android:background">@color/slider_error_notification_background_color</item>
+        <item name="android:padding">@dimen/error_area_padding</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/error_area_text_size</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>
