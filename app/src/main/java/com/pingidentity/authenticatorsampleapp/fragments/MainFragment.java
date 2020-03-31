@@ -118,7 +118,8 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                         //last user was unpaired from the server
                         preferencesManager.setIsDeviceActive(requireContext(), false);
                         Navigation.findNavController(innerView)
-                                .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment2Unpaired());
+                                .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment2());
+
 
                     }
                     for(JsonElement user : usersArray){
@@ -246,8 +247,14 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         if (localUsersArray.isEmpty() || !localUsersArray.containsKey(user.getId())){
             addRemoteUserToLocalBase(user);
         }else{
+            Pair<String, String> p = localUsersArray.get(user.getId());
             if(user.getUsername()==null){
                 user.setUsername(new User().new Username("", ""));
+                localUsersArray.put(user.getId(), new Pair<String, String>(p.first, ""));
+            }else{
+                if(!user.getUsername().getGiven().equals(p.second)){
+                    localUsersArray.put(user.getId(), new Pair<>(p.first, user.getUsername().getGiven()));
+                }
             }
             user.getUsername().setGiven(Objects.requireNonNull(localUsersArray.get(user.getId())).first);
             user.setNickname(Objects.requireNonNull(localUsersArray.get(user.getId())).second);
@@ -255,7 +262,6 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
     }
 
     private void updateLocalBaseWithEditedUser(User user){
-
         if (!user.getUsername().getGiven().isEmpty()) {
             localUsersArray.put(user.getId(), new Pair<>(user.getUsername().getGiven(), user.getNickname()));
         }else{
@@ -264,6 +270,10 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
 
     }
 
+    /**
+     * adds the user object received from the server to local array
+     * @param user
+     */
     private void addRemoteUserToLocalBase(User user){
         adapter.notifyDataSetChanged(user.getId());
         if (user.getUsername()==null || user.getUsername().getGiven()==null){

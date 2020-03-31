@@ -2,7 +2,6 @@
 
     <!-- APPLICATION NAME: TODO MANDATORY TO REPLACE-->
     <string name="app_name">PingOne</string>
-
     <!--Pairing screen-->
 
     <string name="enable_button_text">Enable</string>
