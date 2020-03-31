@@ -10,7 +10,6 @@ buildscript {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.1"
 
     }
-    println "Running gradle version: $gradle.gradleVersion"
 
 }
 

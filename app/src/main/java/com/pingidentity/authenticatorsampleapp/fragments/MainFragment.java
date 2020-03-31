@@ -120,6 +120,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                         Navigation.findNavController(innerView)
                                 .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment2());
 
+
                     }
                     for(JsonElement user : usersArray){
                         User user1 = new Gson().fromJson(user, User.class);
