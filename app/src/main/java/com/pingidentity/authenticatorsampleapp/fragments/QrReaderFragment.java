@@ -199,7 +199,7 @@ public class QrReaderFragment extends Fragment {
                         // Set initial target rotation
                         .setTargetRotation(rotation)
                         .build();
-               preview.setSurfaceProvider(previewView.getPreviewSurfaceProvider());
+               preview.setSurfaceProvider(previewView.createSurfaceProvider(null));
 
                 //QrCode analyzer
                 ImageAnalysis analysis = new ImageAnalysis.Builder()
