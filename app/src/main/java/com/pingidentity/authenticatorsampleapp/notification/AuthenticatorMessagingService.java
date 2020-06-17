@@ -1,23 +1,24 @@
 package com.pingidentity.authenticatorsampleapp.notification;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.navigation.NavDeepLinkBuilder;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pingidentity.authenticatorsampleapp.AuthenticationActivity;
 import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.authenticatorsampleapp.managers.NotificationsManager;
-import com.pingidentity.pingidsdkv2.NotificationObject;
 import com.pingidentity.pingidsdkv2.PingOne;
-import com.pingidentity.pingidsdkv2.PingOneSDKError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Objects;
 
 public class AuthenticatorMessagingService extends FirebaseMessagingService {
 
@@ -29,32 +30,44 @@ public class AuthenticatorMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        PingOne.setDeviceToken(this, token, new PingOne.PingOneSDKCallback() {
-            @Override
-            public void onComplete(@Nullable PingOneSDKError pingOneSDKError) {
-            }
+        PingOne.setDeviceToken(this, token, pingOneSDKError -> {
         });
     }
 
     @Override
     public void onMessageReceived(final @NonNull RemoteMessage remoteMessage) {
-        PingOne.processRemoteNotification(remoteMessage, new PingOne.PingOneNotificationCallback() {
-            @Override
-            public void onComplete(@Nullable NotificationObject notificationObject, @Nullable PingOneSDKError pingOneSDKError) {
-                if(notificationObject!=null){
-                    if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
-                        Intent intent = new Intent(AuthenticatorMessagingService.this, AuthenticationActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        Bundle data = new Bundle();
-                        data.putParcelable("PingOneNotificationObject", notificationObject);
-                        intent.putExtras(data);
-                        startActivity(intent);
-                    }else{
-                        NotificationsManager notificationsManager = new NotificationsManager(AuthenticatorMessagingService.this);
-                        notificationsManager.buildAndSendPendingIntentNotification(notificationObject);
-                    }
+        Pair<String, String> content = parseTitleAndBodyFromRemoteMessage(remoteMessage);
+        PingOne.processRemoteNotification(this, remoteMessage, (notificationObject, pingOneSDKError) -> {
+            if(notificationObject!=null){
+                if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                    Intent intent = new Intent(AuthenticatorMessagingService.this, AuthenticationActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Bundle data = new Bundle();
+                    data.putParcelable("PingOneNotificationObject", notificationObject);
+                    intent.putExtras(data);
+                    intent.putExtra("title", content.first);
+                    intent.putExtra("body", content.second);
+                    startActivity(intent);
+                }else{
+                    NotificationsManager notificationsManager = new NotificationsManager(AuthenticatorMessagingService.this);
+                    notificationsManager.buildAndSendPendingIntentNotification(notificationObject, content);
                 }
             }
         });
+    }
+
+    private Pair<String, String> parseTitleAndBodyFromRemoteMessage(RemoteMessage remoteMessage){
+        String title = getResources().getString(R.string.notification_default_title);
+        String body = getResources().getString(R.string.notification_default_subtitle);
+        if (remoteMessage.getData().containsKey("aps")){
+            try {
+                JSONObject jsonObject = new JSONObject(Objects.requireNonNull(remoteMessage.getData().get("aps")));
+                title = ((JSONObject)jsonObject.get("alert")).get("title").toString();
+                body =  ((JSONObject)jsonObject.get("alert")).get("body").toString();
+            } catch (JSONException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return new Pair<>(title, body);
     }
 }
