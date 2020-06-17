@@ -5,7 +5,7 @@ This sample application demonstrates an authenticator-only application that uses
 ## What’s in the sample app?
 
   - Full native application written in Android, compatible with all Android devices from Android 5 and above.
-  - Integration with PingOne SDK version 1.2.0.
+  - Integration with PingOne SDK version 1.3.0.
   - UI customization can be done easily to get your company flavor on the app.
   - All app texts can be easily localized and modified in one file.
 
@@ -29,7 +29,7 @@ This file will be needed in the installation
 
 1. Clone this repository in Android Studio.
 2. In the **app/build.gradle** file update the **applicationId** value with your package name. For example:
-```java
+```groovy
 android {
     defaultConfig {
         applicationId "com.pingidentity.authenticatorsampleapp"
@@ -39,7 +39,7 @@ android {
 }
 ```
 should be changed to:
-```java
+```groovy
 android {
     defaultConfig {
         applicationId "com.example.myapp" //your package name

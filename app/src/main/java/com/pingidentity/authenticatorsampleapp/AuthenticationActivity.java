@@ -1,5 +1,6 @@
 package com.pingidentity.authenticatorsampleapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,5 +12,10 @@ public class AuthenticationActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultIntent){
+        super.onActivityResult(requestCode, resultCode, resultIntent);
     }
 }
