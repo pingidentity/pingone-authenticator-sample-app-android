@@ -1,9 +1,10 @@
 # Release Notes
 
-## v1.1.0 - June, 2020
-What's new:
-
+## v1.1.0 - June 18th, 2020
+Features:
 - The PingOne SDK library is updated to v1.3.0
+- Show custom notification content in all authentication flows.
+Compatibility:
 - Dependencies are updated to their latest versions:
     * In the 'build.gradle' file at the **project** level:
       * 'com.android.tools.build:gradle:**4.0.0**'
