@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
      * each used to communicate with corresponding fragment,
      * when activity is necessary
      */
-
     private NetworkViewModel networkViewModel;
 
     @Override
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLost(@NonNull Network network) {
             runOnUiThread(() -> networkViewModel.updateNetwork(false));
-
         }
     };
 

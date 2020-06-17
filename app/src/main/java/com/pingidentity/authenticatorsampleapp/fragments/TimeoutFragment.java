@@ -37,14 +37,11 @@ public class TimeoutFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new Handler(getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    requireActivity().onBackPressed();
-                }catch (IllegalStateException e){
-                    //activity already closed do nothing
-                }
+        new Handler(getMainLooper()).postDelayed(() -> {
+            try {
+                requireActivity().onBackPressed();
+            }catch (IllegalStateException e){
+                //activity already closed do nothing
             }
         }, 2000);
     }

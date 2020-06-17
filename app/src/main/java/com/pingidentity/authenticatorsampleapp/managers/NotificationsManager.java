@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.util.Pair;
 
 import com.pingidentity.authenticatorsampleapp.AuthenticationActivity;
 import com.pingidentity.authenticatorsampleapp.R;
@@ -34,7 +35,7 @@ public class NotificationsManager {
      */
     private void createNotificationChannel() {
         /*
-         *Create the NotificationChannel, but only on API 26+
+         * Create the NotificationChannel, but only on API 26+
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = context.getString(R.string.notifications_channel_name);
@@ -49,22 +50,24 @@ public class NotificationsManager {
         }
     }
 
-    private PendingIntent createOnTapPendingIntent(NotificationObject notificationObject){
+    private PendingIntent createOnTapPendingIntent(NotificationObject notificationObject, Pair<String, String> content){
         Intent intent = new Intent(context, AuthenticationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         Bundle data = new Bundle();
         data.putParcelable("PingOneNotificationObject", notificationObject);
         intent.putExtras(data);
+        intent.putExtra("title", content.first);
+        intent.putExtra("body", content.second);
         return PendingIntent.getActivity(context, (int) (System.currentTimeMillis() & 0xfffffff), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public void buildAndSendPendingIntentNotification(NotificationObject notificationObject){
+    public void buildAndSendPendingIntentNotification(NotificationObject notificationObject, Pair<String, String> content){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(context.getString(R.string.notification_default_title))
-                .setContentText(context.getString(R.string.notification_default_subtitle))
+                .setSmallIcon(R.drawable.ic_stat_name)
+                .setContentTitle(content.first)
+                .setContentText(content.second)
                 // Set the intent that will fire when the user taps the notification
-                .setContentIntent(createOnTapPendingIntent(notificationObject))
+                .setContentIntent(createOnTapPendingIntent(notificationObject, content))
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
 
