@@ -29,18 +29,35 @@
                     android:src="@mipmap/logo_horizontal" />
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/title_auth"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_margin="20dp"
+            android:layout_above="@+id/subtitle_auth"/>
+        <TextView
+            android:id="@+id/subtitle_auth"
+            android:textSize="18sp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@+id/progress_bar_auth"/>
         <ProgressBar
             android:id="@+id/progress_bar_auth"
-            android:visibility="gone"
             android:layout_centerInParent="true"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true" />
         <LinearLayout
             android:layout_below="@id/headerBar"
+            android:visibility="invisible"
             android:id="@+id/buttons_fallback_layout"
             android:orientation="vertical"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="2">

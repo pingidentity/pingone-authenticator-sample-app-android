@@ -118,8 +118,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                         //last user was unpaired from the server
                         preferencesManager.setIsDeviceActive(requireContext(), false);
                         Navigation.findNavController(innerView)
-                                .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment2());
-
+                                .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment());
 
                     }
                     for(JsonElement user : usersArray){

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -199,7 +200,7 @@ public class QrReaderFragment extends Fragment {
                         // Set initial target rotation
                         .setTargetRotation(rotation)
                         .build();
-               preview.setSurfaceProvider(previewView.createSurfaceProvider(null));
+               preview.setSurfaceProvider(previewView.createSurfaceProvider());
 
                 //QrCode analyzer
                 ImageAnalysis analysis = new ImageAnalysis.Builder()
@@ -250,7 +251,8 @@ public class QrReaderFragment extends Fragment {
         @Override
         public void analyze(@NonNull ImageProxy imageProxy) {
 
-            if (imageProxy.getImage() == null) {
+            Image image = imageProxy.getImage();
+            if (image == null) {
                 return;
             }
             FirebaseVisionBarcodeDetectorOptions options =
@@ -260,7 +262,7 @@ public class QrReaderFragment extends Fragment {
             FirebaseVisionBarcodeDetector detector =
                     FirebaseVision.getInstance().getVisionBarcodeDetector(options);
             FirebaseVisionImage firebaseVisionImage =
-                    FirebaseVisionImage.fromMediaImage(Objects.requireNonNull(imageProxy.getImage()), 0);
+                    FirebaseVisionImage.fromMediaImage(image, 0);
 
             detector.detectInImage(firebaseVisionImage).addOnSuccessListener(firebaseVisionBarcodes -> {
                 if (firebaseVisionBarcodes.size() > 0 && !detected) {
@@ -268,12 +270,7 @@ public class QrReaderFragment extends Fragment {
                     cameraExecutor.shutdown();
                     onQrCodeDetected(firebaseVisionBarcodes.get(0).getRawValue());
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            }).addOnFailureListener(Throwable::printStackTrace);
 
             imageProxy.close();
         }
