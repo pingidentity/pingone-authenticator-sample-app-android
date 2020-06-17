@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.PairingFragment">
+
+
+    <include
+        layout="@layout/layout_verifying"
+        android:id="@+id/layout_verifying"
+        android:visibility="gone"/>
+
+    <include
+        layout="@layout/layout_success"
+        android:id="@+id/layout_success"
+        android:visibility="gone"/>
+
+    <include
+        layout="@layout/layout_invalid"
+        android:id="@+id/layout_invalid"
+        android:visibility="gone"/>
+
+</FrameLayout>
