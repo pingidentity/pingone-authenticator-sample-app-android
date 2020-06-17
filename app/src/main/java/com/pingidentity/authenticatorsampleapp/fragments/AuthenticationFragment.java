@@ -1,5 +1,9 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +28,11 @@ import androidx.navigation.Navigation;
 
 import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.pingidsdkv2.NotificationObject;
-import com.pingidentity.pingidsdkv2.PingOne;
-import com.pingidentity.pingidsdkv2.PingOneSDKError;
 import com.pingidentity.pingidsdkv2.error.PingOneSDKErrorType;
 
 public class AuthenticationFragment extends Fragment {
+
+    private static final int REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS = 12;
 
     private RelativeLayout layoutSuccess;
     private RelativeLayout layoutBlocked;
@@ -44,7 +49,9 @@ public class AuthenticationFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        notificationObject = getActivity().getIntent().getParcelableExtra("PingOneNotificationObject");
+        if (getActivity()!=null && getActivity().getIntent()!=null){
+            notificationObject = getActivity().getIntent().getParcelableExtra("PingOneNotificationObject");
+        }
     }
 
     @Nullable
@@ -56,21 +63,82 @@ public class AuthenticationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (canAuthenticateWithBiometrics()) {
+        KeyguardManager kManager = (KeyguardManager) requireActivity().getSystemService(Context.KEYGUARD_SERVICE);
+
+        if (canAuthenticateWithBiometrics() || (Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q && kManager.isDeviceSecure())) {
             NavController navController = Navigation.findNavController(view);
             NavDirections navDirections = AuthenticationFragmentDirections.actionAuthenticationFragmentToBiometricsAuthenticationFragment();
             navController.navigate(navDirections);
-        } else {
-
-            fallbackLayout = view.findViewById(R.id.buttons_fallback_layout);
+        }else{
             layoutSuccess = view.findViewById(R.id.layout_auth_success);
             layoutBlocked = view.findViewById(R.id.layout_auth_denied);
             layoutTimeout = view.findViewById(R.id.layout_auth_timeout);
             progressBar = view.findViewById(R.id.progress_bar_auth);
+            /*
+             * there is no biometric sensor present, or no biometric samples enrolled.
+             * Please NOTE: Face recognition isn't defined as biometric until Android Q.
+             */
+            //Returns whether the device is secured with a PIN, pattern or password.
+            if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.M && kManager.isDeviceSecure()
+                    || Build.VERSION.SDK_INT==Build.VERSION_CODES.LOLLIPOP && kManager.isKeyguardLocked())
+            {
+                String title = null;
+                String subtitle = null;
+                if(getActivity()!=null) {
+                    title = getActivity().getIntent().getStringExtra("title");
+                    subtitle = getActivity().getIntent().getStringExtra("body");
+                }
+                requestDeviceCredentials(title, subtitle);
 
-            showFallbackLayout(view);
-            setTimer(notificationObject.getTimeoutDuration());
+            } else {
 
+                fallbackLayout = view.findViewById(R.id.buttons_fallback_layout);
+
+                tryToSetContentFromIntent(view);
+                showFallbackLayout(view);
+                setTimer(notificationObject.getTimeoutDuration());
+                view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+
+
+                    @Override
+                    public void onViewAttachedToWindow(View v) {
+
+                    }
+
+                    @Override
+                    public void onViewDetachedFromWindow(View v) {
+                        if(countDownTimer!=null){
+                            countDownTimer.cancel();
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS){
+            switch (resultCode){
+                case Activity.RESULT_OK:
+                    approveAuth();
+                    break;
+                case Activity.RESULT_CANCELED:
+                default:
+                    denyAuth();
+                    break;
+
+            }
+        }
+    }
+
+    private void tryToSetContentFromIntent(View view) {
+        if(getActivity()!=null && getActivity().getIntent()!=null) {
+            TextView title = view.findViewById(R.id.title_auth);
+            title.setText(getActivity().getIntent().getStringExtra("title"));
+            TextView subtitle = view.findViewById(R.id.subtitle_auth);
+            subtitle.setText(getActivity().getIntent().getStringExtra("body"));
         }
     }
 
@@ -92,26 +160,20 @@ public class AuthenticationFragment extends Fragment {
      */
     private void approveAuth() {
         progressBar.setVisibility(View.VISIBLE);
-        notificationObject.approve(requireContext(), "user", new PingOne.PingOneSDKCallback() {
-            @Override
-            public void onComplete(@Nullable PingOneSDKError pingOneSDKError) {
-                if(pingOneSDKError!=null && pingOneSDKError.getCode()== PingOneSDKErrorType.PUSH_CONFIRMATION_TIMEOUT.getErrorCode()){
-                    showTimeoutLayout();
-                }
-                if (pingOneSDKError == null) {
-                    showSuccessLayout();
-                }
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            requireActivity().finish();
-                        }catch (IllegalStateException e){
-                            //activity already closed, do nothing
-                        }
-                    }
-                }, 2000);
+        notificationObject.approve(requireContext(), "user", pingOneSDKError -> {
+            if(pingOneSDKError!=null && pingOneSDKError.getCode()== PingOneSDKErrorType.PUSH_CONFIRMATION_TIMEOUT.getErrorCode()){
+                showTimeoutLayout();
             }
+            if (pingOneSDKError == null) {
+                showSuccessLayout();
+            }
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                try {
+                    requireActivity().finish();
+                }catch (IllegalStateException e){
+                    //activity already closed, do nothing
+                }
+            }, 2000);
         });
     }
 
@@ -120,63 +182,48 @@ public class AuthenticationFragment extends Fragment {
      */
     private void denyAuth() {
         progressBar.setVisibility(View.VISIBLE);
-        notificationObject.deny(requireContext(), new PingOne.PingOneSDKCallback() {
-            @Override
-            public void onComplete(@Nullable PingOneSDKError pingOneSDKError) {
-                if(pingOneSDKError!=null && pingOneSDKError.getCode()== PingOneSDKErrorType.PUSH_CONFIRMATION_TIMEOUT.getErrorCode()){
-                    showTimeoutLayout();
-                }
-                if (pingOneSDKError==null) {
-                    showBlockedLayout();
-                }
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            requireActivity().finish();
-                        }catch (IllegalStateException e){
-                            //activity already closed, do nothing
-                        }
-                    }
-                }, 2000);
+        notificationObject.deny(requireContext(), pingOneSDKError -> {
+            if(pingOneSDKError!=null && pingOneSDKError.getCode()== PingOneSDKErrorType.PUSH_CONFIRMATION_TIMEOUT.getErrorCode()){
+                showTimeoutLayout();
             }
+            if (pingOneSDKError==null) {
+                showBlockedLayout();
+            }
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                try {
+                    requireActivity().finish();
+                }catch (IllegalStateException e){
+                    //activity already closed, do nothing
+                }
+            }, 2000);
         });
     }
 
     private void showFallbackLayout(View view){
         fallbackLayout.setVisibility(View.VISIBLE);
         Button approve = view.findViewById(R.id.auth_button_approve);
-        approve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (countDownTimer!=null) {
-                    countDownTimer.cancel();
-                }
-                approveAuth();
+        approve.setOnClickListener(v -> {
+            if (countDownTimer!=null) {
+                countDownTimer.cancel();
             }
+            approveAuth();
         });
         Button deny = view.findViewById(R.id.auth_button_deny);
-        deny.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (countDownTimer!=null) {
-                    countDownTimer.cancel();
-                }
-                denyAuth();
+        deny.setOnClickListener(v -> {
+            if (countDownTimer!=null) {
+                countDownTimer.cancel();
             }
+            denyAuth();
         });
     }
 
     private void showSuccessLayout(){
         try {
-            requireActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (progressBar.getVisibility() != View.GONE) {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                    layoutSuccess.setVisibility(View.VISIBLE);
+            requireActivity().runOnUiThread(() -> {
+                if (progressBar.getVisibility() != View.GONE) {
+                    progressBar.setVisibility(View.GONE);
                 }
+                layoutSuccess.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
             //activity already closed, do nothing
@@ -185,14 +232,11 @@ public class AuthenticationFragment extends Fragment {
 
     private void showBlockedLayout(){
         try {
-            requireActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (progressBar.getVisibility() != View.GONE) {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                    layoutBlocked.setVisibility(View.VISIBLE);
+            requireActivity().runOnUiThread(() -> {
+                if (progressBar.getVisibility() != View.GONE) {
+                    progressBar.setVisibility(View.GONE);
                 }
+                layoutBlocked.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
             //activity already closed, do nothing
@@ -201,14 +245,11 @@ public class AuthenticationFragment extends Fragment {
 
     private void showTimeoutLayout(){
         try {
-            requireActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (progressBar.getVisibility() != View.GONE) {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                    layoutTimeout.setVisibility(View.VISIBLE);
+            requireActivity().runOnUiThread(() -> {
+                if (progressBar.getVisibility() != View.GONE) {
+                    progressBar.setVisibility(View.GONE);
                 }
+                layoutTimeout.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
             //activity already closed, do nothing
@@ -226,10 +267,11 @@ public class AuthenticationFragment extends Fragment {
 
             public void onFinish() {
                 showTimeoutLayout();
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    try {
                         requireActivity().finish();
+                    }catch (IllegalStateException e){
+                        //activity already closed, do nothing
                     }
                 }, 2000);
 
@@ -238,14 +280,18 @@ public class AuthenticationFragment extends Fragment {
         countDownTimer.start();
     }
 
-
-
-
-
-
-
-
-
+    private void requestDeviceCredentials(String notificationTitle, String notificationSubtitle) {
+        /*
+         * Create the Confirm Credentials screen. You can customize the title and description. Or
+         * we will provide a generic one for you if you leave it null
+         */
+        KeyguardManager mKeyguardManager = (KeyguardManager) requireActivity().getSystemService(Context.KEYGUARD_SERVICE);
+        Intent intent = mKeyguardManager.createConfirmDeviceCredentialIntent(notificationTitle,
+                notificationSubtitle);
+        if (intent != null) {
+            startActivityForResult(intent, REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS);
+        }
+    }
 
 }
 

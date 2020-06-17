@@ -41,6 +41,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/camera_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
                 <LinearLayout
                     android:id="@+id/layout_camera_disabled"
                     android:visibility="gone"
@@ -77,10 +81,7 @@
                         android:background="@drawable/roundable_button_white"/>
 
                 </LinearLayout>
-                <androidx.camera.view.PreviewView
-                    android:id="@+id/camera_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+
             </FrameLayout>
             <LinearLayout
                 android:layout_width="match_parent"
