@@ -49,7 +49,9 @@ android {
 }
 ```
 3. Copy and paste the ```google-services.json``` file received from Firebase into the ```app``` folder.
-4. Click on ```Sync Project with Gradle Files```. At this step you can build and run the app.
+4. Click on ```File``` -> ```Sync Project with Gradle Files```.
+
+At this point you can build and run the app.
 
 ## Customization
 1. Use the built-in Asset Studio to import your own application icon and override the placeholder with the name ```ic_launcher```.
