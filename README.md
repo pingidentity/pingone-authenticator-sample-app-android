@@ -49,7 +49,7 @@ android {
 }
 ```
 3. Copy and paste the ```google-services.json``` file received from Firebase into the ```app``` folder.
-4. Click on ```File``` -> ````Sync Project with Gradle Files```.
+4. Click on ```File``` -> ```Sync Project with Gradle Files```.
 
 At this point you can build and run the app.
 
