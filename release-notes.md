@@ -1,5 +1,11 @@
 # Release Notes
 
+### v1.2.0 - April 5th, 2021
+Features:
+* Updated SDK to version 1.4.0.
+* Added one time passcode in users screen.
+* Deprecated current pairing method and added support to new one with returned object of PairingInfo.
+
 ## v1.1.0 - June 18th, 2020
  Features:
 
