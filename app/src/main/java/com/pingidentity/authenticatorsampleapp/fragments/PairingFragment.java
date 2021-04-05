@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
 import com.pingidentity.pingidsdkv2.PingOne;
+import com.pingidentity.pingidsdkv2.PingOneSDKError;
+import com.pingidentity.pingidsdkv2.types.PairingInfo;
 
 
 /**
@@ -107,20 +109,29 @@ public class PairingFragment extends Fragment {
         /*
          * Try to start pairing when QR code value is recognized
          */
-        PingOne.pair(requireContext(), barcode, pingOneSDKError -> {
-            if(pingOneSDKError == null){
-                requireActivity().runOnUiThread(() -> {
-                    hideVerifyingLayout();
-                    showSuccessLayout();
-                });
-            }else{
-                if(pingOneSDKError.getMessage() != null){
+
+        PingOne.pair(requireContext(), barcode, new PingOne.PingOneSDKPairingCallback() {
+            @Override
+            public void onComplete(PairingInfo pairingInfo, @Nullable PingOneSDKError error) {
+                this.onComplete(error);
+            }
+
+            @Override
+            public void onComplete(@Nullable PingOneSDKError error) {
+                if(error == null){
                     requireActivity().runOnUiThread(() -> {
                         hideVerifyingLayout();
-                        showErrorLayout(pingOneSDKError.getMessage());
+                        showSuccessLayout();
                     });
-                }
+                }else{
+                    if(error.getMessage() != null){
+                        requireActivity().runOnUiThread(() -> {
+                            hideVerifyingLayout();
+                            showErrorLayout(error.getMessage());
+                        });
+                    }
 
+                }
             }
         });
     }

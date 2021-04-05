@@ -36,9 +36,9 @@ public class AuthenticatorMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(final @NonNull RemoteMessage remoteMessage) {
-        Pair<String, String> content = parseTitleAndBodyFromRemoteMessage(remoteMessage);
         PingOne.processRemoteNotification(this, remoteMessage, (notificationObject, pingOneSDKError) -> {
             if(notificationObject!=null){
+                Pair<String, String> content = parseTitleAndBodyFromRemoteMessage(remoteMessage);
                 if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                     Intent intent = new Intent(AuthenticatorMessagingService.this, AuthenticationActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
