@@ -15,6 +15,7 @@ This sample application demonstrates an authenticator-only application that uses
   - Override user names locally, or use names from PingOne directory.
   - Authentication flow with push notifications using biometric recognition to approve authentication.
   - Send logs option to track customers issues with support ID.
+  - Get one time passcode for paired user with timer animation.
 
 ## Prerequisites
 
