@@ -8,6 +8,7 @@ Features:
 Dependencies Updated:
 * com.google.firebase:firebase-messaging:20.3.0
 * androidx.appcompat:appcompat:1.2.0
+* androidx.constraintlayout:constraintlayout:1.1.3
 
 ### Known issues
 - After pairing, the app generates new passcodes even when running in the background.
