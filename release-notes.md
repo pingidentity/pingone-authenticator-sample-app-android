@@ -40,5 +40,5 @@ Features:
 - Authentication flow with push notifications using biometric recognition to approve authentication.
 - Side menu with send logs option to track customer issues with support ID.
 
-### Known issues
+# Known issues
 - After pairing, the app generates new passcodes even when running in the background.
