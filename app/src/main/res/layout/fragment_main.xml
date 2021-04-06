@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/side_menu_nav_view"
         android:layout_width="180dp"
@@ -51,12 +52,19 @@
             android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <include
-            android:id="@+id/slider_error_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/headerBar"
-            layout="@layout/layout_error_slider"/>
+            <com.pingidentity.authenticatorsampleapp.views.OneTimePasscodeView
+                android:id="@+id/passcode_view"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:layout_below="@+id/headerBar"
+                layout="@layout/one_time_passcode_view"
+                android:visibility="invisible"/>
+            <include
+                android:id="@+id/slider_error_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/headerBar"
+                layout="@layout/layout_error_slider"/>
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/headerBar"
                 style="@style/headerBar"
@@ -105,7 +113,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical">
+                </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"

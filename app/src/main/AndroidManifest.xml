@@ -27,7 +27,8 @@
             android:value="barcode"/>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="anroid.intent.action.VIEW"/>
