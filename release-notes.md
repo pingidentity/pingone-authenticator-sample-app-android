@@ -5,6 +5,13 @@ Features:
 * Updated SDK to version 1.4.0.
 * Added one time passcode in users screen.
 
+Dependencies Updated:
+* com.android.tools.build:gradle:4.0.1
+* com.google.gms:google-services:4.3.4
+* com.google.firebase:firebase-messaging:20.3.0
+* androidx.appcompat:appcompat:1.2.0
+* androidx.constraintlayout:constraintlayout:1.1.3
+
 ### Known issues
 - After pairing, the app generates new passcodes even when running in the background.
 
