@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setFcmRegistrationIdToken();
         setUpNetworkListeners();
 
         networkViewModel = new ViewModelProvider(this).get(NetworkViewModel.class);
@@ -65,20 +64,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setFcmRegistrationIdToken() {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    Log.w(TAG, "getToken failed", task.getException());
-                    return;
-                }
-                if (task.getResult() != null) {
-                    // Get new Instance ID token
-                    String token = task.getResult();
-                    Log.d(TAG, "FCM Token = " + token);
-                }
-            }
-        });
-    }
 }
