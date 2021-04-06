@@ -1,21 +1,26 @@
 package com.pingidentity.authenticatorsampleapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.pingidentity.authenticatorsampleapp.viewmodels.NetworkViewModel;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = MainActivity.class.getCanonicalName();
     /*
      * view models separated by underlying fragments' logic
      * each used to communicate with corresponding fragment,
@@ -27,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setUpNetworkListeners();
 
         networkViewModel = new ViewModelProvider(this).get(NetworkViewModel.class);
@@ -59,4 +63,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
