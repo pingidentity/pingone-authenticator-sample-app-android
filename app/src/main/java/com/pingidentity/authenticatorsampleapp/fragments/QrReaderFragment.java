@@ -125,12 +125,14 @@ public class QrReaderFragment extends Fragment {
         });
         pairingButton  = view.findViewById(R.id.button_pair);
         pairingButton.setOnClickListener(v -> {
-            pairingButton.setEnabled(false);
-            detected = true;
-            if(cameraExecutor!=null && !cameraExecutor.isShutdown()) {
-                cameraExecutor.shutdown();
+            if(pairingButton.isEnabled()){
+                pairingButton.setEnabled(false);
+                detected = true;
+                if(cameraExecutor!=null && !cameraExecutor.isShutdown()) {
+                    cameraExecutor.shutdown();
+                }
+                onQrCodeDetected(pairingKeyInput.getText().toString());
             }
-            onQrCodeDetected(pairingKeyInput.getText().toString());
         });
     }
 

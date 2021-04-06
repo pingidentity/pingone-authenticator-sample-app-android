@@ -1,14 +1,23 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
+import android.animation.ValueAnimator;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -41,28 +50,38 @@ import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
 import com.pingidentity.authenticatorsampleapp.models.User;
 import com.pingidentity.authenticatorsampleapp.util.UserInterfaceUtil;
 import com.pingidentity.authenticatorsampleapp.viewmodels.NetworkViewModel;
+import com.pingidentity.authenticatorsampleapp.views.OneTimePasscodeView;
 import com.pingidentity.pingidsdkv2.PingOne;
 import com.pingidentity.pingidsdkv2.PingOneSDKError;
+
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCallback {
+public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCallback, OneTimePasscodeView.PassCodeDataProvider {
+
+    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MainFragment.class);
 
     private DrawerLayout mDrawerLayout;
     private ProgressBar progressBar;
     private TextView notificationSliderTextView;
+    private OneTimePasscodeView progressView;
 
     private LinkedHashMap<String, Pair<String, String>> localUsersArray;
     private ArrayList<User> usersArrayList = new ArrayList<>();
     private UsersAdapter adapter;
+    private boolean shouldRetryPasscode = true;
 
     public MainFragment() {
         // Required empty public constructor
@@ -92,14 +111,10 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         populateSupportIdView(view);
         populateVersionView(view);
         populateErrorSliderView(view);
+        populateOTP(view);
 
         NetworkViewModel networkViewModel = new ViewModelProvider(requireActivity()).get(NetworkViewModel.class);
-        networkViewModel.getNetwork().observe(requireActivity(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                UserInterfaceUtil.handleNetworkChange(aBoolean, requireContext(), notificationSliderTextView);
-            }
-        });
+        networkViewModel.getNetwork().observe(requireActivity(), aBoolean -> UserInterfaceUtil.handleNetworkChange(aBoolean, requireContext(), notificationSliderTextView));
 
         final PreferencesManager preferencesManager = new PreferencesManager();
         localUsersArray = preferencesManager.getUsersList(requireContext());
@@ -108,37 +123,42 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         }
         progressBar.setVisibility(View.VISIBLE);
         final View innerView = view;
-        PingOne.getInfo(requireContext(), new PingOne.PingOneGetInfoCallback() {
-            @Override
-            public void onComplete(@Nullable JsonObject jsonObject, @Nullable PingOneSDKError pingOneSDKError) {
-                if (jsonObject!=null){
-                    usersArrayList.clear();
-                    JsonArray usersArray = jsonObject.getAsJsonArray("users");
-                    if (usersArray.size()==0){
-                        //last user was unpaired from the server
-                        preferencesManager.setIsDeviceActive(requireContext(), false);
-                        Navigation.findNavController(innerView)
-                                .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment());
+        PingOne.getInfo(requireContext(), (jsonObject, pingOneSDKError) -> {
+            if (jsonObject!=null){
+                usersArrayList.clear();
+                JsonArray usersArray = jsonObject.getAsJsonArray("users");
+                if (usersArray.size()==0){
+                    //last user was unpaired from the server
+                    preferencesManager.setIsDeviceActive(requireContext(), false);
+                    Navigation.findNavController(innerView)
+                            .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment());
 
-                    }
-                    for(JsonElement user : usersArray){
-                        User user1 = new Gson().fromJson(user, User.class);
-                        updateUserWithLocalBase(user1);
-                        usersArrayList.add(user1);
-                    }
-                    invalidateLocalUsersWithRemote(preferencesManager);
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
                 }
+                for(JsonElement user : usersArray){
+                    User user1 = new Gson().fromJson(user, User.class);
+                    updateUserWithLocalBase(user1);
+                    usersArrayList.add(user1);
+                }
+                invalidateLocalUsersWithRemote(preferencesManager);
+                requireActivity().runOnUiThread(() -> progressBar.setVisibility(View.GONE));
             }
         });
     }
 
+    private void populateOTP(View view) {
+        progressView = view.findViewById(R.id.passcode_view);
+        progressView.setPassCodeDataProvider(this);
+        final ViewTreeObserver observer= progressView.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                startOtpSequence();
+                    progressView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
+
+    }
 
     private void populateNewButton(View view) {
 
@@ -232,7 +252,6 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         adapter = new UsersAdapter(requireContext(), usersArrayList, this);
         userList.setAdapter(adapter);
         userList.setDivider(null);
-
     }
 
     /*
@@ -247,9 +266,12 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
             addRemoteUserToLocalBase(user);
         }else{
             Pair<String, String> p = localUsersArray.get(user.getId());
+            if (p==null){
+                p = new Pair<>("","");
+            }
             if(user.getUsername()==null){
                 user.setUsername(new User().new Username("", ""));
-                localUsersArray.put(user.getId(), new Pair<String, String>(p.first, ""));
+                localUsersArray.put(user.getId(), new Pair<>(p.first, ""));
             }else{
                 if(!user.getUsername().getGiven().equals(p.second)){
                     localUsersArray.put(user.getId(), new Pair<>(p.first, user.getUsername().getGiven()));
@@ -331,4 +353,36 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         PreferencesManager preferencesManager = new PreferencesManager();
         preferencesManager.storeUsersList(requireContext(), localUsersArray);
     }
+
+    private void startOtpSequence(){
+        PingOne.getOneTimePassCode(progressView.getContext(), (otpData, error) -> {
+            if(otpData!=null){
+                progressView.updatePassCode(otpData);
+            }else{
+                progressView.setVisibility(View.INVISIBLE);
+                if(shouldRetryPasscode){
+                    final Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startOtpSequence();
+                        }
+                    }, 5000);
+                    shouldRetryPasscode=false;
+                }
+            }
+
+        });
+    }
+
+    @Override
+    public void onPassCodeExpired() {
+        startOtpSequence();
+    }
+
+    @Override
+    public void onCopyToClipboard() {
+        UserInterfaceUtil.promptMessage(progressView.getContext(), notificationSliderTextView, getString(R.string.copied));
+    }
+
 }
