@@ -5,10 +5,6 @@ Features:
 * Updated SDK to version 1.4.0.
 * Added one time passcode in users screen.
 
-Compatibility notes:
-* Deprecated current pairing method and added support to new one with returned object of PairingInfo.
-* Deprecated current processRemoteNotification method and added support to new one with Context as a parameter.
-
 ### Known issues
 - After pairing, the app generates new passcodes even when running in the background.
 
