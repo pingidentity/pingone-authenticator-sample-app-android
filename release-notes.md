@@ -5,6 +5,10 @@ Features:
 * Updated SDK to version 1.4.0.
 * Added one time passcode in users screen.
 
+Dependencies Updated:
+* com.google.firebase:firebase-messaging:20.3.0
+* androidx.appcompat:appcompat:1.2.0
+
 ### Known issues
 - After pairing, the app generates new passcodes even when running in the background.
 
