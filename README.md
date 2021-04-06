@@ -5,7 +5,7 @@ This sample application demonstrates an authenticator-only application that uses
 ## What’s in the sample app?
 
   - Full native application written in Android, compatible with all Android devices from Android 5 and above.
-  - Integration with PingOne SDK version 1.3.0.
+  - Integration with PingOne SDK version 1.4.0.
   - UI customization can be done easily to get your company flavor on the app.
   - All app texts can be easily localized and modified in one file.
 
