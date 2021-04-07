@@ -17,6 +17,14 @@
     <color name="greenLight">#4ABA78</color>
     <color name="colorAlpha">#00FFFFFF</color>
 
+    <color name="otp_view_background">#F4F7F9</color>
+    <color name="otp_view_passcode">#4B637C</color>
+    <color name="otp_view_title">#676E75</color>
+    <color name="otp_view_border">#DBDFE2</color>
+    <color name="otp_view_progress_normal">#8797A8</color>
+
+
+
     <color name="layout_verifying_background_color">#FB6E7286</color>
     <color name="layout_success_background_color">#FB4ABA78</color>
     <color name="layout_invalid_background_color">#FBA31300</color>
