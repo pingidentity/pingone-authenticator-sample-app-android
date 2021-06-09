@@ -16,7 +16,7 @@ This sample application demonstrates an authenticator-only application that uses
   - Authentication flow with push notifications using biometric recognition to approve authentication.
   - Send logs option to track customers issues with support ID.
   - Get one time passcode for paired user with timer animation.
-  - Device Integrity validation as a threat protection
+  - Device Integrity validation as a threat protection.
 
 ## Prerequisites
 
