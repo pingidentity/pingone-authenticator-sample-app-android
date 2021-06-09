@@ -1,9 +1,41 @@
 # Release Notes
 
+## v1.3.0 - August 1st, 2021
+Features:
+
+ - Added Device Integrity Verification mechanism.
+ - The PingOne SDK library is updated to v1.6.0
+ 
+ Compatibility:
+ - Dependencies are updated to their latest versions:
+     * In the 'build.gradle' file at the **project** level:
+       * 'com.android.tools.build:gradle:**4.2.1**'
+       * 'com.google.gms:google-services:**4.3.8**'
+       * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.3.5**'
+     * In the 'build.gradle' file at the **app** level:
+       * Migrated to FireBase BOM:
+         implementation platform('com.google.firebase:firebase-bom:26.3.0')
+         implementation 'com.google.firebase:firebase-core'
+         implementation 'com.google.firebase:firebase-messaging'
+       * 'com.google.android.gms:play-services-vision:**20.1.3**'
+       * 'androidx.navigation:navigation-fragment:**2.3.5**'
+       * 'androidx.navigation:navigation-ui:**2.3.5**'
+       * Migrated to Google Machine Learning Barcode scanner:
+           implementation 'com.google.mlkit:barcode-scanning:16.1.2'
+       * 'androidx.camera:camera-core:**1.0.0-beta06**'
+       * 'androidx.camera:camera-camera2:**1.0.0-beta06**'
+       * 'androidx.camera:camera-lifecycle:**1.0.0-beta06**'
+       * 'androidx.camera:camera-view:**1.0.0-alpha13**'
+       
+ Bug fixes:
+  - Fixed the issue where the application was generating new passcodes in the background.
+
+
 ## v1.2.0 - April 6th, 2021
 Features:
-* Updated SDK to version 1.4.0.
-* Added one time passcode in users screen.
+
+ - Updated SDK to version 1.4.0.
+ - Added one time passcode in users screen.
 
 Dependencies Updated:
 * com.android.tools.build:gradle:4.0.1
@@ -15,13 +47,14 @@ Dependencies Updated:
 ### Known issues
 - After pairing, the app generates new passcodes even when running in the background.
 
+
 ## v1.1.0 - June 18th, 2020
- Features:
+Features:
 
  - The PingOne SDK library is updated to v1.3.0
  - Show custom notification content in all authentication flows.
 
- Compatibility:
+Compatibility:
  
  - Dependencies are updated to their latest versions:
     * In the 'build.gradle' file at the **project** level:
