@@ -5,7 +5,7 @@ This sample application demonstrates an authenticator-only application that uses
 ## What’s in the sample app?
 
   - Full native application written in Android, compatible with all Android devices from Android 5 and above.
-  - Integration with PingOne SDK version 1.4.0.
+  - Integration with PingOne SDK version 1.6.0.
   - UI customization can be done easily to get your company flavor on the app.
   - All app texts can be easily localized and modified in one file.
 
@@ -16,6 +16,7 @@ This sample application demonstrates an authenticator-only application that uses
   - Authentication flow with push notifications using biometric recognition to approve authentication.
   - Send logs option to track customers issues with support ID.
   - Get one time passcode for paired user with timer animation.
+  - Device Integrity validation as a threat protection
 
 ## Prerequisites
 
@@ -66,8 +67,16 @@ At this point you can build and run the app.
 ##### Note: For further understanding the code implementation of this app, refer to [Setup a mobile app] using the PingOne SDK sample code.
 
 
+## Device Integrity validation
+To enable device integrity validation on the mobile side you need to retrieve SafetyNet ApiKey. Refer to [Obtain a SafetyNet API Key] for exact instructions.
+The retrieved ApiKey should replace the placeholder in the file `app/gradle.properties`, for example:
+```properties
+safetynet_api_key = "AIIZa..."
+```
+
 [Setup a mobile app]: <https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
 [Firebase project set-up guidelines]:<https://firebase.google.com/docs/android/setup?authuser=0#register-app>
+[Obtain a SafetyNet API Key]: <https://developer.android.com/training/safetynet/attestation#obtain-api-key>
 [Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation>
 [Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id>
 [PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android/blob/master/README.md>
