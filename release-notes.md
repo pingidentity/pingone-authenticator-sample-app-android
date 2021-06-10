@@ -3,7 +3,7 @@
 ## v1.3.0 - August 1st, 2021
 Features:
 
- - Added Device Integrity Verification mechanism.
+ - Added device integrity validation for threat protection.
  - The PingOne SDK library is updated to v1.6.0
  
  Compatibility:
