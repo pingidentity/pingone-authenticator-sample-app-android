@@ -1,6 +1,5 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -13,7 +12,6 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.biometric.BiometricConstants;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.fragment.app.Fragment;
@@ -24,7 +22,6 @@ import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.pingidsdkv2.NotificationObject;
 import com.pingidentity.pingidsdkv2.error.PingOneSDKErrorType;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class BiometricsAuthenticationFragment extends Fragment {

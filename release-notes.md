@@ -1,5 +1,6 @@
 # Release Notes
 
+
 ## v1.2.0 - April 6th, 2021
 Features:
 * Updated SDK to version 1.4.0.
@@ -14,6 +15,7 @@ Dependencies Updated:
 
 ### Known issues
 - After pairing, the app generates new passcodes even when running in the background.
+
 
 ## v1.1.0 - June 18th, 2020
  Features:

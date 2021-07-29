@@ -1,6 +1,8 @@
 package com.pingidentity.authenticatorsampleapp.notification;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,10 @@ public class AuthenticatorMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
+        /*
+         * saves the FCM Registration Token to SharedPreferences for logging reasons
+         */
+        saveFcmRegistrationToken(token);
         PingOne.setDeviceToken(this, token, pingOneSDKError -> {
         });
     }
@@ -69,5 +75,12 @@ public class AuthenticatorMessagingService extends FirebaseMessagingService {
             }
         }
         return new Pair<>(title, body);
+    }
+
+    private void saveFcmRegistrationToken(@NonNull String token){
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AuthenticatorSharedPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("FCM_TOKEN", token);
+        editor.apply();
     }
 }

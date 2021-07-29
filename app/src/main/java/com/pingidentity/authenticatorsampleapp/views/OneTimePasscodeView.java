@@ -24,6 +24,7 @@ public class OneTimePasscodeView extends ConstraintLayout implements View.OnClic
     private final int OTP_GET_NEW_CODE = 99;
     private final int MILLIS = 1000;
 
+    boolean working = false;
     OneTimePasscodeInfo otpData;
     TextView passCode;
     View animatedWrapper;
@@ -63,6 +64,10 @@ public class OneTimePasscodeView extends ConstraintLayout implements View.OnClic
         handleAnimation(this, otpData);
     }
 
+    public boolean isWorking(){
+        return working;
+    }
+
     private void setToClipboard(Context context, String text) {
         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         android.content.ClipData clip = android.content.ClipData.newPlainText(text, text);
@@ -70,6 +75,7 @@ public class OneTimePasscodeView extends ConstraintLayout implements View.OnClic
     }
 
     private void handleAnimation(final View progress, OneTimePasscodeInfo otpData){
+        working = true;
         passCode.setText(otpData.getPasscode());
         animated.setBackgroundColor(getResources().getColor(R.color.otp_view_progress_normal));
         passCode.setTextColor(getResources().getColor(R.color.otp_view_passcode));
@@ -107,6 +113,7 @@ public class OneTimePasscodeView extends ConstraintLayout implements View.OnClic
             }
             if(percent > OTP_GET_NEW_CODE){
                 if(listener!=null){
+                    working=false;
                     listener.onPassCodeExpired();
                 }
 
