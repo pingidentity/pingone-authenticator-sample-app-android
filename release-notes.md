@@ -4,7 +4,7 @@
 Features:
 
  - Added device integrity validation for threat protection.
- - The PingOne SDK library is updated to v1.6.0
+ - Updated SDK to version 1.6.0.
  
  Compatibility:
  - Dependencies are updated to their latest versions:
