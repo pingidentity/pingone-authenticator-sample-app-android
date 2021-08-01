@@ -1,7 +1,6 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -20,6 +19,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.experimental.UseExperimental;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -34,16 +34,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.mlkit.vision.barcode.Barcode;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.common.InputImage;
 import com.pingidentity.authenticatorsampleapp.R;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -111,11 +110,7 @@ public class QrReaderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                if(charSequence.length() == 14){
-                    pairingButton.setEnabled(true);
-                }else{
-                    pairingButton.setEnabled(false);
-                }
+                pairingButton.setEnabled(charSequence.length() == 14);
             }
 
             @Override
@@ -217,9 +212,7 @@ public class QrReaderFragment extends Fragment {
                 processCameraProvider.unbindAll();
 
                 processCameraProvider.bindToLifecycle(QrReaderFragment.this, cameraSelector, preview, analysis);
-            }catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            }catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
@@ -249,32 +242,34 @@ public class QrReaderFragment extends Fragment {
 
     private class QrCodeAnalyzer implements ImageAnalysis.Analyzer{
 
-        @SuppressLint("UnsafeExperimentalUsageError")
+        @UseExperimental(markerClass = androidx.camera.core.ExperimentalGetImage.class)
         @Override
         public void analyze(@NonNull ImageProxy imageProxy) {
-
             Image image = imageProxy.getImage();
             if (image == null) {
                 return;
             }
-            FirebaseVisionBarcodeDetectorOptions options =
-                    new FirebaseVisionBarcodeDetectorOptions.Builder()
-                            .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_ALL_FORMATS)
-                            .build();
-            FirebaseVisionBarcodeDetector detector =
-                    FirebaseVision.getInstance().getVisionBarcodeDetector(options);
-            FirebaseVisionImage firebaseVisionImage =
-                    FirebaseVisionImage.fromMediaImage(image, 0);
+            InputImage inputImage =
+                    InputImage.fromMediaImage(image, imageProxy.getImageInfo().getRotationDegrees());
+            BarcodeScanner scanner = BarcodeScanning.getClient();
 
-            detector.detectInImage(firebaseVisionImage).addOnSuccessListener(firebaseVisionBarcodes -> {
-                if (firebaseVisionBarcodes.size() > 0 && !detected) {
-                    detected = true;
-                    cameraExecutor.shutdown();
-                    onQrCodeDetected(firebaseVisionBarcodes.get(0).getRawValue());
-                }
-            }).addOnFailureListener(Throwable::printStackTrace);
+            Task<List<Barcode>> result = scanner.process(inputImage)
+                    .addOnSuccessListener(barcodes -> {
+                        if (barcodes.size() > 0 && !detected) {
+                            detected = true;
+                            cameraExecutor.shutdown();
+                            onQrCodeDetected(barcodes.get(0).getRawValue());
 
-            imageProxy.close();
+                        }
+                        imageProxy.close();
+
+                    })
+                    .addOnFailureListener(e -> {
+                        e.printStackTrace();
+                        imageProxy.close();
+                    });
+
+
         }
 
     }
