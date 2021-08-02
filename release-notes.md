@@ -3,8 +3,9 @@
 ## v1.3.0 - August 1st, 2021
 Features:
 
- - Added device integrity validation for threat protection.
  - Updated SDK to version 1.6.0.
+ - Added device integrity validation for threat protection.
+
  
  Compatibility:
  - Dependencies are updated to their latest versions:
