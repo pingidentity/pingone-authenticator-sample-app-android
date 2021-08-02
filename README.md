@@ -5,7 +5,7 @@ This sample application demonstrates an authenticator-only application that uses
 ## What’s in the sample app?
 
   - Full native application written in Android, compatible with all Android devices from Android 5 and above.
-  - Integration with PingOne SDK version 1.6.0.
+  - Integration with [PingOne mobile SDK] version 1.6.0.
   - UI customization can be done easily to get your company flavor on the app.
   - All app texts can be easily localized and modified in one file.
 
@@ -80,3 +80,4 @@ safetynet_api_key = "AIIZa..."
 [Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation>
 [Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id>
 [PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android/blob/master/README.md>
+[PingOne mobile SDK]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
