@@ -36,7 +36,7 @@ android {
          * Warning: The greatest value Google Play allows for this field is 2100000000.
          * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
          */
-        versionCode = 9
+        versionCode = 10
         /*
          * The next variable is a string so that you can describe the app version as a
          * <major>.<minor>.<point> string, or as any other type of absolute or relative
@@ -81,6 +81,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    implementation "com.google.android.gms:play-services-safetynet:17.0.1"
 
     /*
      * ML Kit is a mobile SDK that brings Google's on-device machine learning expertise to a device
