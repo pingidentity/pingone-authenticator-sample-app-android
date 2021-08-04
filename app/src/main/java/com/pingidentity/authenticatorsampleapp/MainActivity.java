@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        logFcmRegistrationIdToken();
         setUpNetworkListeners();
 
         networkViewModel = new ViewModelProvider(this).get(NetworkViewModel.class);
@@ -64,4 +65,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void logFcmRegistrationIdToken() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AuthenticatorSharedPreferences", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("FCM_TOKEN", null);
+        if (token==null){
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    Log.d(TAG, "FCM Token = " + task.getResult());
+                }
+            });
+        }else {
+            Log.d(TAG, "FCM Token = " + token);
+        }
+    }
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -82,6 +83,8 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
     private ArrayList<User> usersArrayList = new ArrayList<>();
     private UsersAdapter adapter;
     private boolean shouldRetryPasscode = true;
+    private boolean otpAnimationEnabled = true;
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -97,6 +100,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         super.onViewCreated(view, savedInstanceState);
         mDrawerLayout = view.findViewById(R.id.side_menu_drawer);
         progressBar = view.findViewById(R.id.progress_bar_get_info);
+        progressView = view.findViewById(R.id.passcode_view);
 
         Button button = view.findViewById(R.id.button_menu);
         button.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +115,6 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         populateSupportIdView(view);
         populateVersionView(view);
         populateErrorSliderView(view);
-        populateOTP(view);
 
         NetworkViewModel networkViewModel = new ViewModelProvider(requireActivity()).get(NetworkViewModel.class);
         networkViewModel.getNetwork().observe(requireActivity(), aBoolean -> UserInterfaceUtil.handleNetworkChange(aBoolean, requireContext(), notificationSliderTextView));
@@ -145,19 +148,29 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         });
     }
 
-    private void populateOTP(View view) {
-        progressView = view.findViewById(R.id.passcode_view);
+    @Override
+    public void onResume(){
+        super.onResume();
+        populateOTP();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        otpAnimationEnabled = false;
+    }
+
+    private void populateOTP() {
+        otpAnimationEnabled = true;
         progressView.setPassCodeDataProvider(this);
         final ViewTreeObserver observer= progressView.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 startOtpSequence();
-                    progressView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                progressView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-
-
     }
 
     private void populateNewButton(View view) {
@@ -355,29 +368,34 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
     }
 
     private void startOtpSequence(){
-        PingOne.getOneTimePassCode(progressView.getContext(), (otpData, error) -> {
-            if(otpData!=null){
-                progressView.updatePassCode(otpData);
-            }else{
-                progressView.setVisibility(View.INVISIBLE);
-                if(shouldRetryPasscode){
-                    final Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            startOtpSequence();
-                        }
-                    }, 5000);
-                    shouldRetryPasscode=false;
+        if(!progressView.isWorking()){
+            PingOne.getOneTimePassCode(progressView.getContext(), (otpData, error) -> {
+                if(otpData!=null){
+                    progressView.updatePassCode(otpData);
+                }else{
+                    progressView.setVisibility(View.INVISIBLE);
+                    if(shouldRetryPasscode){
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startOtpSequence();
+                            }
+                        }, 5000);
+                        shouldRetryPasscode=false;
+                    }
                 }
-            }
 
-        });
+            });
+        }
+
     }
 
     @Override
     public void onPassCodeExpired() {
-        startOtpSequence();
+        if(otpAnimationEnabled){
+            startOtpSequence();
+        }
     }
 
     @Override
