@@ -1,5 +1,29 @@
 # Release Notes
 
+## v1.4.0 - April 25th, 2022
+Features:
+
+ - Updated SDK to version 1.7.0.
+ - Added support for authentication using QR Code scanning or manual typing of an authentication code
+ - Added Certificate Transparency mechanism to protect against mis-issued certificates
+ - The JWT signature validation updated to use more strong EC algorithm.
+
+ Compatibility:
+ - Minimal Android version is updated to 26 (Android 8)
+ - Dependencies are updated to their latest versions:
+     * In the 'build.gradle' file at the **project** level:
+       * 'com.android.tools.build:gradle:**7.1.1**'
+       * 'com.google.gms:google-services:**4.3.10**'
+     * In the 'build.gradle' file at the **app** level:
+       * 'com.google.mlkit:barcode-scanning:**17.0.0**'
+       * 'androidx.camera:camera-camera2:**1.0.2**'
+       * 'androidx.camera:camera-lifecycle:**1.0.2**'
+       * 'androidx.camera:camera-view:**1.0.0-alpha30**'
+ - Dependencies added:
+     * In the 'build.gradle' file at the **app** level:
+       * 'com.appmattus.certificatetransparency:certificatetransparency-android:1.0.0'
+
+
 ## v1.3.0 - August 1st, 2021
 Features:
 
