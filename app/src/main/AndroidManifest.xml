@@ -4,12 +4,11 @@
     package="com.pingidentity.authenticatorsampleapp"
     tools:ignore="GoogleAppIndexingWarning">
 
-    <uses-feature android:name="android.hardware.camera2"/>
-    <uses-feature android:name="android.hardware.camera2.autofocus"/>
+    <uses-feature android:name="android.hardware.camera.any" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <!-- by default we disable Android backup mechanism as we don't want any sensitive info to be uploaded to the cloud -->
 
     <application
@@ -26,21 +25,33 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="barcode"/>
-        <activity android:name=".MainActivity"
+            android:value="barcode" />
+
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="anroid.intent.action.VIEW"/>
+                <action android:name="anroid.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- the Authentication activity should not appear in the list of recent apps
+            to avoid re-triggering authentication for the same flow if reopened -->
         <activity
             android:name=".AuthenticationActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop"/>
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".QrAuthenticationActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <service
             android:name=".notification.AuthenticatorMessagingService"
             android:exported="false">

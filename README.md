@@ -4,27 +4,28 @@ This sample application demonstrates an authenticator-only application that uses
 
 ## What’s in the sample app?
 
-  - Full native application written in Android, compatible with all Android devices from Android 5 and above.
-  - Integration with [PingOne mobile SDK] version 1.6.0.
-  - UI customization can be done easily to get your company flavor on the app.
-  - All app texts can be easily localized and modified in one file.
+- Full native application written in Android, compatible with all Android devices from Android 8 and above.
+- Integration with [PingOne mobile SDK] version 1.7.0.
+- UI customization can be done easily to get your company flavor on the app.
+- All app texts can be easily localized and modified in one file.
 
 ## Features
 
-  - Pairing flow using QR code scanning or manual input.
-  - Override user names locally, or use names from PingOne directory.
-  - Authentication flow with push notifications using biometric recognition to approve authentication.
-  - Send logs option to track customers issues with support ID.
-  - Get one time passcode for paired user with timer animation.
-  - Device integrity validation for threat protection.
+- Pairing flow using QR code scanning or manual input.
+- Override user names locally, or use names from PingOne directory.
+- Authentication flow with push notifications using biometric recognition to approve authentication.
+- Send logs option to track customers issues with support ID.
+- Get one time passcode for paired user with timer animation.
+- Device integrity validation for threat protection.
+- Authentication flow with QR Code scanning or manual typing of an authentication code
 
 ## Prerequisites
 
-The Authenticator sample app requires Android Studio 3.6 or higher and Android SDK 29 to compile and run.
+The Authenticator sample app requires Android Studio 4.2 or higher and Android SDK 31 to compile and run.
 
 You should choose a **package name** for your application. A package name uniquely identifies your app on the device and in the Google Play Store. Generally, the package name of an app is in the format `com.example.myapp`, but it’s completely up to the developer to choose the name. *A package name is often referred to as an **applicationId***. For more information refer to [Android applicationId guidelines].
 
-To set up your application for work with push messages in Android, refer to [Firebase project set-up guidelines]. You should register your Android application with the package name you choose, and download the ```google-services.json``` file when prompted. 
+To set up your application for work with push messages in Android, refer to [Firebase project set-up guidelines]. You should register your Android application with the package name you choose, and download the ```google-services.json``` file when prompted.
 This file will be needed in the installation
 
 ## Installation
@@ -58,10 +59,10 @@ At this point you can build and run the app.
 ## Customization
 1. Use the built-in Asset Studio to import your own application icon and override the placeholder with the name ```ic_launcher```.
 2. Overwrite the following images:
-    * `app/src/main/res/mipmap-hdpi/logo_splash.png` for the splash screen image.
-    * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for the logo in the navigation bar.
-    ##### Note: 
-    It is mandatory to replace these images before submitting the application to Google Play, in order to create a unique app complying with Google's restrictions. For more information, refer to [Google Play Impersonation and Intellectual Property Guidelines].
+   * `app/src/main/res/mipmap-hdpi/logo_splash.png` for the splash screen image.
+   * `app/src/main/res/mipmap-xxhdpi/logo_horizontal.png` for the logo in the navigation bar.
+   ##### Note:
+   It is mandatory to replace these images before submitting the application to Google Play, in order to create a unique app complying with Google's restrictions. For more information, refer to [Google Play Impersonation and Intellectual Property Guidelines].
 
 3. If needed, update the `app/src/main/res/values/strings.xml` file, to customize any string in the application.
 ##### Note: For further understanding the code implementation of this app, refer to [Setup a mobile app] using the PingOne SDK sample code.

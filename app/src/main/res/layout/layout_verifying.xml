@@ -3,14 +3,15 @@
     android:background="@color/layout_verifying_background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/image_spinner"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_above="@+id/text_view_verifying"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/cd_spinner_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@mipmap/icon_spinner"/>
+        android:src="@mipmap/icon_spinner" />
     <TextView
         android:id="@+id/text_view_verifying"
         android:layout_centerHorizontal="true"
@@ -20,7 +21,6 @@
         android:padding="10dp"
         android:textSize="22sp"
         android:textAppearance="@font/proxima_nova_regular"
-
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_main_background_white"
         android:text="@string/pairing_layout_verifying_text"/>
 </RelativeLayout>
