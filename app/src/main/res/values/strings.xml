@@ -1,12 +1,14 @@
 <resources>
 
+    <string name="generic_string_error">Error</string>
     <!--Pairing screen-->
 
     <string name="enable_button_text">Enable</string>
     <string name="pairing_title">Pairing</string>
     <string name="pairing_subtitle">To complete pairing, scan the QR code displayed in your browser, or enter the pairing key manually</string>
-    <string name="pairing_hint"><i>Pairing key</i></string>
+    <string name="pairing_hint"><b>Enter Pairing key</b></string>
     <string name="pairing_button">Pair</string>
+    <string name="pairing_invalid_key">Invalid pairing key</string>
 
     <string name="pairing_camera_permission_rationale">You must enable camera permission in order to scan.</string>
     <string name="pairing_camera_button_enable">Enable</string>
@@ -16,7 +18,8 @@
 
     <!-- Main Screen -->
     <string name="main_view_accounts_title">Accounts</string>
-    <string name="main_view_new_button_text">New</string>
+    <string name="main_view_new_button_text">Add Account</string>
+    <string name="main_view_qr_auth_button_text">QR Auth</string>
     <string name="main_view_send_logs_title">Send Logs</string>
     <string name="pop_up_logs_sent_message">Logs sent</string>
     <string name="pop_up_logs_sent_positive_button">OK</string>
@@ -27,7 +30,7 @@
 
     <string name="auth_view_button_approve">Approve</string>
     <string name="auth_view_button_deny">Deny</string>
-    <string name="auth_success_layout_message">Approved</string>
+    <string name="auth_success_layout_message">Completed</string>
     <string name="auth_denied_layout_message">Blocked</string>
     <string name="auth_timeout_layout_message">Timed out</string>
     <string name="auth_bio_layout_title">Authenticate to approve</string>
@@ -51,5 +54,21 @@
     <!-- PLACEHOLDERS -->
     <string name="username_placeholder">User</string>
     <string name="copied">Copied</string>
+
+    <!--QR authentication screen-->
+
+    <string name="qr_authentication_title">Authentication</string>
+    <string name="qr_authentication_subtitle">To authenticate scan the QR code displayed in your browser, or enter the code manually</string>
+    <string name="qr_authentication_hint">Enter Code Manually</string>
+    <string name="qr_authentication_button">Authenticate</string>
+    <string name="qr_authentication_spinner_text">Authenticating</string>
+    <string name="text_view_success_authentication">Success</string>
+    <string name="qr_view_timeout_layout_message">Timed Out</string>
+    <string name="qr_view_denied_layout_message">Denied</string>
+    <string name="qr_auth_approve_title">Authenticate</string>
+    <string name="qr_auth_title_single_user">Approve account</string>
+    <string name="qr_auth_title_multiply_users">Select account</string>
+    <string name="qr_auth_subtitle_multiply_users">Select one of the listed accounts to authenticate with.</string>
+
 
 </resources>

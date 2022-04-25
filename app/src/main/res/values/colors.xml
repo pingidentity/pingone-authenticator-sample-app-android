@@ -2,18 +2,23 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">@color/colorGreyLight</color>
+    <color name="colorAccent">@color/color_light_grey_borders</color>
 
-    <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000</color>
-    <color name="colorGreyLight">#D3D3D3</color>
+
+    <!-- the background color of the toolbar and status bar-->
+    <color name="color_toolbar_background">#ECECEC</color>
+    <color name="color_main_background_white">#FFFFFF</color>
+
+    <color name="color_title_text_color">#3D454D</color>
+    <color name="color_subtitle_text_color">#93999F</color>
+    <color name="color_hint_text_color">#ABB0B4</color>
+    <color name="color_light_grey_borders">#D3D3D3</color>
 
     <color name="blueLight">#a8d4e9</color>
-    <color name="blue">#2996CC</color>
     <color name="blue_darker">#2482c1</color>
 
     <color name="redLight">#A31300</color>
-    <color name="yellowLight">#EEB91C</color>
     <color name="greenLight">#4ABA78</color>
     <color name="colorAlpha">#00FFFFFF</color>
 
@@ -22,11 +27,16 @@
     <color name="otp_view_title">#676E75</color>
     <color name="otp_view_border">#DBDFE2</color>
     <color name="otp_view_progress_normal">#8797A8</color>
+    <color name="color_button_blue_enabled">#2996CC</color>
+    <color name="color_button_blue_disabled">#C3C7CB</color>
+    <color name="color_button_black_blue_disabled">#7D8389</color>
+    <color name="color_approve_button_enabled">#4ABA78</color>
+    <color name="color_approve_button_disabled">#804ABA78</color>
 
-
-
+    <color name="layout_fragment_background">#F2F2F2</color>
     <color name="layout_verifying_background_color">#FB6E7286</color>
     <color name="layout_success_background_color">#FB4ABA78</color>
+    <color name="layout_timed_out_background_color">#EEB91C</color>
     <color name="layout_invalid_background_color">#FBA31300</color>
 
     <color name="side_menu_background_color">#F1F5F8</color>

@@ -4,19 +4,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkRequest;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.pingidentity.authenticatorsampleapp.fragments.SplashFragmentDirections;
+import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
 import com.pingidentity.authenticatorsampleapp.viewmodels.NetworkViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         logFcmRegistrationIdToken();
         setUpNetworkListeners();
-
         networkViewModel = new ViewModelProvider(this).get(NetworkViewModel.class);
 
     }
@@ -55,13 +54,7 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager!=null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                connectivityManager.registerDefaultNetworkCallback(networkCallback);
-            } else {
-                NetworkRequest request = new NetworkRequest.Builder()
-                        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
-                connectivityManager.registerNetworkCallback(request, networkCallback);
-            }
+            connectivityManager.registerDefaultNetworkCallback(networkCallback);
         }
     }
 
@@ -69,12 +62,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AuthenticatorSharedPreferences", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("FCM_TOKEN", null);
         if (token==null){
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    Log.d(TAG, "FCM Token = " + task.getResult());
-                }
-            });
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->
+                    Log.d(TAG, "FCM Token = " + task.getResult()));
         }else {
             Log.d(TAG, "FCM Token = " + token);
         }

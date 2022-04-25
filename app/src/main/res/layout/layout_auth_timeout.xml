@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/yellowLight"
+    android:background="@color/layout_timed_out_background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_centerInParent="true"
         android:padding="10dp"
         android:textSize="22sp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_main_background_white"
         android:textAppearance="@font/proxima_nova_regular"
         android:text="@string/auth_timeout_layout_message"/>
 </RelativeLayout>

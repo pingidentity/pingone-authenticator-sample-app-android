@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <androidx.appcompat.widget.Toolbar
             style="@style/headerBar"
             android:id="@+id/headerBar"
@@ -42,7 +38,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
                 <androidx.camera.view.PreviewView
-                    android:id="@+id/pairing_camera_preview"
+                    android:id="@+id/qr_auth_camera_preview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
                 <LinearLayout
@@ -79,9 +75,7 @@
                         android:layout_marginEnd="25dp"
                         android:layout_marginStart="25dp"
                         android:background="@drawable/roundable_button_black_white"/>
-
                 </LinearLayout>
-
             </FrameLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,76 +85,60 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/pairingTitle"
+                    android:id="@+id/authenticationTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_title_text_color"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/pairing_title"
-                    android:textSize="22sp"
-                    android:textColor="@color/color_title_text_color"
-                    />
+                    android:text="@string/qr_authentication_title"
+                    android:textSize="22sp"/>
 
                 <TextView
                     android:id="@+id/pairingSubTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/pairing_subtitle"
-                    android:textSize="13sp"
-                    android:textColor="@color/color_title_text_color"/>
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/qr_authentication_subtitle"
+                    android:textColor="@color/color_title_text_color"
+                    android:textSize="13sp"/>
 
                 <EditText
-                    android:id="@+id/pairing_key_input"
+                    android:id="@+id/qr_authentication_data_input"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="7dp"
                     android:background="@drawable/roundable_edittext"
-                    android:gravity="center"
-                    android:hint="@string/pairing_hint"
-                    android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
-                    android:textSize="18sp"
                     android:textColorHint="@color/color_hint_text_color"
                     android:textColor="@color/color_title_text_color"
-                    tools:targetApi="o"/>
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:inputType="textCapCharacters"
+                    android:hint="@string/qr_authentication_hint"
+                    android:textSize="18sp"/>
 
                 <Button
-                    android:id="@+id/button_pair"
+                    android:id="@+id/qr_authenticate_button"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
-                    android:background="@drawable/roundable_button_black_blue"
-                    android:enabled="false"
+                    android:textColor="@color/color_hint_text_color"
+                    android:background="@drawable/roundable_button_blue"
                     android:gravity="center"
                     android:stateListAnimator="@null"
-                    android:text="@string/pairing_button"
-                    android:textColor="@color/color_title_text_color"
+                    android:text="@string/qr_authentication_button"
                     android:textAllCaps="false"
-                    android:textSize="18sp"/>
+                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeTextType="uniform"
+                    android:enabled="false"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-    <include
-        layout="@layout/layout_verifying"
-        android:id="@+id/layout_verifying"
-        android:visibility="gone"/>
-
-    <include
-        layout="@layout/layout_success"
-        android:id="@+id/layout_success"
-        android:visibility="gone"/>
-
-    <include
-        layout="@layout/layout_invalid"
-        android:id="@+id/layout_invalid"
-        android:visibility="gone"/>
-</FrameLayout>

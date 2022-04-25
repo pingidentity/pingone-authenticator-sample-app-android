@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.pingidentity.authenticatorsampleapp.R;
 
@@ -37,6 +39,8 @@ public class TimeoutFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        drawStatusBar(getResources().
+                getColor(R.color.layout_timed_out_background_color, null));
         new Handler(getMainLooper()).postDelayed(() -> {
             try {
                 requireActivity().onBackPressed();
@@ -44,5 +48,13 @@ public class TimeoutFragment extends Fragment {
                 //activity already closed do nothing
             }
         }, 2000);
+    }
+
+    //set color of the status bar according to the underlying view
+    private void drawStatusBar(int color){
+        Window window = requireActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(color);
     }
 }

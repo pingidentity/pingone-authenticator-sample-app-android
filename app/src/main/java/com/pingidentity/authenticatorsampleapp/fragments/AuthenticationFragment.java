@@ -12,6 +12,8 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -42,8 +44,9 @@ public class AuthenticationFragment extends Fragment {
 
     private NotificationObject notificationObject;
     private CountDownTimer countDownTimer;
-    public AuthenticationFragment() {
 
+    public AuthenticationFragment() {
+        //required empty c-tor
     }
 
     @Override
@@ -79,8 +82,7 @@ public class AuthenticationFragment extends Fragment {
              * Please NOTE: Face recognition isn't defined as biometric until Android Q.
              */
             //Returns whether the device is secured with a PIN, pattern or password.
-            if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.M && kManager.isDeviceSecure()
-                    || Build.VERSION.SDK_INT==Build.VERSION_CODES.LOLLIPOP && kManager.isKeyguardLocked())
+            if (kManager.isDeviceSecure() || kManager.isKeyguardLocked())
             {
                 String title = null;
                 String subtitle = null;
@@ -148,9 +150,6 @@ public class AuthenticationFragment extends Fragment {
      * are enrolled on the device, if not, return false
      */
     private boolean canAuthenticateWithBiometrics() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return false;
-        }
         BiometricManager biometricManager = BiometricManager.from(requireContext());
         return biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS;
     }
@@ -223,6 +222,8 @@ public class AuthenticationFragment extends Fragment {
                 if (progressBar.getVisibility() != View.GONE) {
                     progressBar.setVisibility(View.GONE);
                 }
+                drawStatusBar(getResources().
+                        getColor(R.color.layout_success_background_color, null));
                 layoutSuccess.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
@@ -236,6 +237,8 @@ public class AuthenticationFragment extends Fragment {
                 if (progressBar.getVisibility() != View.GONE) {
                     progressBar.setVisibility(View.GONE);
                 }
+                drawStatusBar(getResources().
+                        getColor(R.color.layout_invalid_background_color, null));
                 layoutBlocked.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
@@ -249,6 +252,8 @@ public class AuthenticationFragment extends Fragment {
                 if (progressBar.getVisibility() != View.GONE) {
                     progressBar.setVisibility(View.GONE);
                 }
+                drawStatusBar(getResources().
+                        getColor(R.color.layout_timed_out_background_color, null));
                 layoutTimeout.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
@@ -291,6 +296,14 @@ public class AuthenticationFragment extends Fragment {
         if (intent != null) {
             startActivityForResult(intent, REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS);
         }
+    }
+
+    //set color of the status bar according to the underlying view
+    private void drawStatusBar(int color){
+        Window window = requireActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(color);
     }
 
 }

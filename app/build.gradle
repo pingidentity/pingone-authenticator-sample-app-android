@@ -6,11 +6,8 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
-    lintOptions {
-        abortOnError false
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -25,8 +22,8 @@ android {
          * different app. So once you publish your app, you should never change the application ID.
          */
         applicationId "com.pingidentity.authenticatorsampleapp"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 31
         /*
          * Next value is a positive integer so that other apps can programmatically evaluate it,
          * for example to check an upgrade or downgrade relationship. You can set the value to any
@@ -36,15 +33,13 @@ android {
          * Warning: The greatest value Google Play allows for this field is 2100000000.
          * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
          */
-        versionCode = 10
+        versionCode = 12
         /*
          * The next variable is a string so that you can describe the app version as a
          * <major>.<minor>.<point> string, or as any other type of absolute or relative
          * version identifier. The value has no purpose other than to be displayed to users.
          */
-        versionName "1.3.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionName "1.4.0"
 
         /*
          * This is the variable that is injected into build config, while building the application.
@@ -81,14 +76,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation "com.google.android.gms:play-services-safetynet:17.0.1"
+    implementation "com.google.android.gms:play-services-safetynet:18.0.0"
 
     /*
      * ML Kit is a mobile SDK that brings Google's on-device machine learning expertise to a device
      * ML Kit's APIs all run on-device, allowing for real-time use cases where you want to process
      * a live camera stream. This also means that the functionality is available offline.
      */
-    implementation 'com.google.mlkit:barcode-scanning:16.2.0'
+    implementation 'com.google.mlkit:barcode-scanning:17.0.0'
 
     /*
      * The jose.4.j library is an open source (Apache 2.0) implementation of JWT and the JOSE
@@ -99,11 +94,16 @@ dependencies {
     //Google's gSon library to build and parse JSON format
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    /*
+     * The library that provides ability to use Certificate Transparency
+     * https://www.certificate-transparency.org
+     */
+    implementation("com.appmattus.certificatetransparency:certificatetransparency-android:1.0.0")
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation "androidx.drawerlayout:drawerlayout:1.1.1"
@@ -118,19 +118,13 @@ dependencies {
 
 
     // Use the most recent version of CameraX
-    def camerax_version = '1.0.0-beta06'
-    implementation "androidx.camera:camera-core:${camerax_version}"
+    def camerax_version = '1.0.2'
+    // CameraX core library using camera2 implementation
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     // CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha13"
+    implementation "androidx.camera:camera-view:1.0.0-alpha30"
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    //Robolectric
-    androidTestImplementation 'org.robolectric:robolectric:4.3.1'
+    //implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 }

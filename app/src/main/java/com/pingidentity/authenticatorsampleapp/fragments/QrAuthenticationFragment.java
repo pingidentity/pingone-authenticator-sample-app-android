@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -48,7 +49,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class QrReaderFragment extends Fragment {
+public class QrAuthenticationFragment extends Fragment {
+
+    public QrAuthenticationFragment(){
+        //required empty c-tor
+    }
 
     private PreviewView previewView;
 
@@ -62,7 +67,7 @@ public class QrReaderFragment extends Fragment {
      */
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
-    private  NavController controller;
+    private NavController controller;
     private boolean detected = false;
 
     /*
@@ -70,16 +75,14 @@ public class QrReaderFragment extends Fragment {
      */
     private LinearLayout cameraDisableLayout;
 
-    private EditText pairingKeyInput;
-    private Button pairingButton;
+    private EditText qrContentInput;
+    private Button qrAuthenticationButton;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_qr, container, false);
+        return inflater.inflate(R.layout.fragment_qr_authentication_scan, container, false);
     }
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -88,7 +91,7 @@ public class QrReaderFragment extends Fragment {
          * Register the permissions callback, which handles the user's response to the
          * system permissions dialog.
          */
-         requestPermissionLauncher =
+        requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         // Permission is granted. Continue the action or workflow in your
@@ -105,50 +108,48 @@ public class QrReaderFragment extends Fragment {
         // Initialize background executor each time the view is recreated
         cameraExecutor = Executors.newSingleThreadExecutor();
 
-        previewView = view.findViewById(R.id.pairing_camera_preview);
+        previewView = view.findViewById(R.id.qr_auth_camera_preview);
 
         cameraDisableLayout = view.findViewById(R.id.layout_camera_disabled);
 
-        pairingKeyInput = view.findViewById(R.id.pairing_key_input);
-        /*
-         * adding a textChangedListener to editText to activate the Pair button at
-         * the moment pairing key reaches needed length
-         */
-        pairingKeyInput.addTextChangedListener(new TextWatcher() {
+        qrContentInput = view.findViewById(R.id.qr_authentication_data_input);
+        qrContentInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        qrContentInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //do nothing
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                if (charSequence.length()==14){
-                    pairingButton.setEnabled(true);
-                    pairingButton.setTextColor(getResources().
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length()==8){
+                    qrAuthenticationButton.setTextColor(getResources().
                             getColor(R.color.color_button_blue_enabled, null));
+                    qrAuthenticationButton.setEnabled(true);
                 }else{
-                    pairingButton.setEnabled(false);
-                    pairingButton.setTextColor(getResources().
+                    qrAuthenticationButton.setTextColor(getResources().
                             getColor(R.color.color_title_text_color, null));
+                    qrAuthenticationButton.setEnabled(false);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
+            public void afterTextChanged(Editable s) {
+                //do nothing
             }
         });
-        pairingButton  = view.findViewById(R.id.button_pair);
-        pairingButton.setOnClickListener(v -> {
-            if(pairingButton.isEnabled()){
-                pairingButton.setEnabled(false);
+        qrAuthenticationButton  = view.findViewById(R.id.qr_authenticate_button);
+        qrAuthenticationButton.setOnClickListener(v -> {
+            if(qrAuthenticationButton.isEnabled()){
+                qrAuthenticationButton.setEnabled(false);
                 detected = true;
                 if(cameraExecutor!=null && !cameraExecutor.isShutdown()) {
                     cameraExecutor.shutdown();
                 }
-                onQrCodeDetected(pairingKeyInput.getText().toString());
+                onQrCodeDetected(qrContentInput.getText().toString());
             }
         });
+
     }
 
     @Override
@@ -177,7 +178,6 @@ public class QrReaderFragment extends Fragment {
         }
     }
 
-
     /**
      * Declare and bind preview and analysis use cases
      */
@@ -195,7 +195,7 @@ public class QrReaderFragment extends Fragment {
         final ListenableFuture<ProcessCameraProvider> futureCameraProvider = ProcessCameraProvider.getInstance(requireContext());
         futureCameraProvider.addListener(() -> {
             try{
-                ProcessCameraProvider processCameraProvider = (ProcessCameraProvider) futureCameraProvider.get();
+                ProcessCameraProvider processCameraProvider = futureCameraProvider.get();
 
                 // Preview
                 Preview preview = new Preview.Builder()
@@ -204,7 +204,7 @@ public class QrReaderFragment extends Fragment {
                         // Set initial target rotation
                         .setTargetRotation(rotation)
                         .build();
-               preview.setSurfaceProvider(cameraExecutor, previewView.getSurfaceProvider());
+                preview.setSurfaceProvider(cameraExecutor, previewView.getSurfaceProvider());
 
                 //QrCode analyzer
                 ImageAnalysis analysis = new ImageAnalysis.Builder()
@@ -214,11 +214,11 @@ public class QrReaderFragment extends Fragment {
                         // during the lifecycle of this use case
                         .setTargetRotation(rotation)
                         .build();
-                analysis.setAnalyzer(cameraExecutor, new QrCodeAnalyzer());
+                analysis.setAnalyzer(cameraExecutor, new QrAuthenticationFragment.QrCodeAnalyzer());
 
                 processCameraProvider.unbindAll();
 
-                processCameraProvider.bindToLifecycle(QrReaderFragment.this, cameraSelector, preview, analysis);
+                processCameraProvider.bindToLifecycle(QrAuthenticationFragment.this, cameraSelector, preview, analysis);
             }catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -286,11 +286,10 @@ public class QrReaderFragment extends Fragment {
         previewView.post(this::bindCameraUseCases);
     }
 
-    private void onQrCodeDetected(String barcode){
-        requireActivity().runOnUiThread(() -> {
-            NavDirections action = QrReaderFragmentDirections.actionCamera2FragmentToPairingFragment2(barcode);
-            controller.navigate(action);
-        });
+    private void showCameraDisabledLayout(){
+        cameraDisableLayout.setVisibility(View.VISIBLE);
+        Button enable = cameraDisableLayout.findViewById(R.id.button_camera_enable);
+        enable.setOnClickListener(view -> openApplicationSettings());
     }
 
     private void openApplicationSettings(){
@@ -320,16 +319,14 @@ public class QrReaderFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void showCameraDisabledLayout(){
-        cameraDisableLayout.setVisibility(View.VISIBLE);
-        Button enable = cameraDisableLayout.findViewById(R.id.button_camera_enable);
-        enable.setOnClickListener(view -> openApplicationSettings());
-    }
-
     private void hideCameraDisabledLayout(){
         cameraDisableLayout.setVisibility(View.INVISIBLE);
     }
 
-
-
+    private void onQrCodeDetected(String qrCodeContent) {
+        requireActivity().runOnUiThread(() -> {
+            NavDirections action = QrAuthenticationFragmentDirections.actionQrScanFragmentToQrParserFragment(qrCodeContent);
+            controller.navigate(action);
+        });
+    }
 }

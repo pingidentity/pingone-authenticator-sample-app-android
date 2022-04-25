@@ -5,14 +5,14 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/image_checkmark"
-        android:layout_above="@+id/text_view_success"
+        android:layout_above="@+id/text_view_succes_qr_auth"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/cd_checkmark_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@mipmap/icon_checkmark"/>
     <TextView
-        android:id="@+id/text_view_success"
+        android:id="@+id/text_view_succes_qr_auth"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,5 +22,5 @@
         android:textAppearance="@font/proxima_nova_regular"
 
         android:textColor="@color/color_main_background_white"
-        android:text="@string/pairing_layout_paired_text"/>
+        android:text="@string/auth_success_layout_message"/>
 </RelativeLayout>

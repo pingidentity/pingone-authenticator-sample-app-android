@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
@@ -20,7 +19,7 @@ public class NotificationsManager {
 
 
     private static final String CHANNEL_ID = "PingOneNotificationsChannel";
-    private Context context;
+    private final Context context;
 
     public NotificationsManager(Context context){
         this.context = context;
@@ -37,28 +36,44 @@ public class NotificationsManager {
         /*
          * Create the NotificationChannel, but only on API 26+
          */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = context.getString(R.string.notifications_channel_name);
-            String description = context.getString(R.string.notifications_channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-            notificationManager.createNotificationChannel(channel);
-        }
+        CharSequence name = context.getString(R.string.notifications_channel_name);
+        String description = context.getString(R.string.notifications_channel_description);
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private PendingIntent createOnTapPendingIntent(NotificationObject notificationObject, Pair<String, String> content){
         Intent intent = new Intent(context, AuthenticationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(
+                /*
+                 * When using this flag, if a task is already running for the activity you are now
+                 * starting, then a new activity will not be started; instead, the current task will
+                 * simply be brought to the front of the screen with the state it was last in
+                 */
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                /*
+                 * This can only be used in conjunction with FLAG_ACTIVITY_NEW_TASK.
+                 * This flag will cause any existing task that would be associated with the activity
+                 * to be cleared before the activity is started
+                 */
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                /*
+                 * This flag will bring any currently running instance of that task to the
+                 * foreground, and then clear it to its root state. This is especially useful,
+                 * for example, when launching an activity from the notification manager
+                 */
+                Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Bundle data = new Bundle();
         data.putParcelable("PingOneNotificationObject", notificationObject);
         intent.putExtras(data);
         intent.putExtra("title", content.first);
         intent.putExtra("body", content.second);
-        return PendingIntent.getActivity(context, (int) (System.currentTimeMillis() & 0xfffffff), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(context, (int) (System.currentTimeMillis() & 0xfffffff), intent, PendingIntent.FLAG_UPDATE_CURRENT |PendingIntent.FLAG_MUTABLE);
     }
 
     public void buildAndSendPendingIntentNotification(NotificationObject notificationObject, Pair<String, String> content){

@@ -7,6 +7,7 @@
     app:startDestination="@id/splashFragment">
 
     <fragment
+        android:windowSoftInputMode="adjustResize"
         android:id="@+id/splashFragment"
         android:name="com.pingidentity.authenticatorsampleapp.fragments.SplashFragment"
         android:label="fragment_splash"
