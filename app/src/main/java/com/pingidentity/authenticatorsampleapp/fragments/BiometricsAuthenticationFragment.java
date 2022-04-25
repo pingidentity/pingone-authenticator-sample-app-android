@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -178,6 +180,8 @@ public class BiometricsAuthenticationFragment extends Fragment {
                 if (progressBar.getVisibility() != View.GONE) {
                     progressBar.setVisibility(View.GONE);
                 }
+                drawStatusBar(getResources().
+                        getColor(R.color.layout_timed_out_background_color, null));
                 layoutTimeout.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
@@ -191,6 +195,8 @@ public class BiometricsAuthenticationFragment extends Fragment {
                 if (progressBar.getVisibility() != View.GONE) {
                     progressBar.setVisibility(View.GONE);
                 }
+                drawStatusBar(getResources().
+                        getColor(R.color.layout_success_background_color, null));
                 layoutSuccess.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
@@ -204,6 +210,8 @@ public class BiometricsAuthenticationFragment extends Fragment {
                 if (progressBar.getVisibility() != View.GONE) {
                     progressBar.setVisibility(View.GONE);
                 }
+                drawStatusBar(getResources().
+                        getColor(R.color.layout_invalid_background_color, null));
                 layoutBlocked.setVisibility(View.VISIBLE);
             });
         }catch (IllegalStateException e){
@@ -215,7 +223,7 @@ public class BiometricsAuthenticationFragment extends Fragment {
         if (countDownTimer!=null) {
             countDownTimer.cancel();
         }
-        countDownTimer = new CountDownTimer((secondsLeft) * 1000 , 1000) {
+        countDownTimer = new CountDownTimer((secondsLeft) * 1000L, 1000) {
 
             public void onTick(long millisUntilFinished) {
             }
@@ -226,12 +234,21 @@ public class BiometricsAuthenticationFragment extends Fragment {
                 if(biometricPrompt!=null) {
                     biometricPrompt.cancelAuthentication();
                 }
-                navController.navigate(BiometricsAuthenticationFragmentDirections.actionBiometricsAuthenticationFragmentToTimeoutFragment());
+                navController.navigate(BiometricsAuthenticationFragmentDirections.
+                        actionBiometricsAuthenticationFragmentToTimeoutFragment());
 
 
                 }
             };
 
         countDownTimer.start();
+    }
+
+    //set color of the status bar according to the underlying view
+    private void drawStatusBar(int color){
+        Window window = requireActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(color);
     }
 }

@@ -1,17 +1,10 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
-import android.animation.ValueAnimator;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,7 +25,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -42,29 +34,23 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.pingidentity.authenticatorsampleapp.BuildConfig;
+import com.pingidentity.authenticatorsampleapp.QrAuthenticationActivity;
 import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.authenticatorsampleapp.adapters.SideMenuAdapter;
 import com.pingidentity.authenticatorsampleapp.adapters.UsersAdapter;
 import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
-import com.pingidentity.authenticatorsampleapp.models.User;
+import com.pingidentity.authenticatorsampleapp.models.MainFragmentUserModel;
 import com.pingidentity.authenticatorsampleapp.util.UserInterfaceUtil;
 import com.pingidentity.authenticatorsampleapp.viewmodels.NetworkViewModel;
 import com.pingidentity.authenticatorsampleapp.views.OneTimePasscodeView;
 import com.pingidentity.pingidsdkv2.PingOne;
-import com.pingidentity.pingidsdkv2.PingOneSDKError;
-
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Logger;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 
 /**
@@ -72,15 +58,13 @@ import static androidx.core.content.ContextCompat.getSystemService;
  */
 public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCallback, OneTimePasscodeView.PassCodeDataProvider {
 
-    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MainFragment.class);
-
     private DrawerLayout mDrawerLayout;
     private ProgressBar progressBar;
     private TextView notificationSliderTextView;
     private OneTimePasscodeView progressView;
 
     private LinkedHashMap<String, Pair<String, String>> localUsersArray;
-    private ArrayList<User> usersArrayList = new ArrayList<>();
+    private final ArrayList<MainFragmentUserModel> usersArrayList = new ArrayList<>();
     private UsersAdapter adapter;
     private boolean shouldRetryPasscode = true;
     private boolean otpAnimationEnabled = true;
@@ -103,14 +87,10 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         progressView = view.findViewById(R.id.passcode_view);
 
         Button button = view.findViewById(R.id.button_menu);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDrawer();
-            }
-        });
+        button.setOnClickListener(view1 -> openDrawer());
+
         populateUsersView(view);
-        populateNewButton(view);
+        populateButtons(view);
         populateMenuView(view);
         populateSupportIdView(view);
         populateVersionView(view);
@@ -138,9 +118,9 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
 
                 }
                 for(JsonElement user : usersArray){
-                    User user1 = new Gson().fromJson(user, User.class);
-                    updateUserWithLocalBase(user1);
-                    usersArrayList.add(user1);
+                    MainFragmentUserModel mainFragmentUserModel = new Gson().fromJson(user, MainFragmentUserModel.class);
+                    updateUserWithLocalBase(mainFragmentUserModel);
+                    usersArrayList.add(mainFragmentUserModel);
                 }
                 invalidateLocalUsersWithRemote(preferencesManager);
                 requireActivity().runOnUiThread(() -> progressBar.setVisibility(View.GONE));
@@ -173,17 +153,19 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         });
     }
 
-    private void populateNewButton(View view) {
+    private void populateButtons(View view) {
 
         Button addNewUserButton = view.findViewById(R.id.button_new_user);
-        addNewUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final NavController navController = Navigation.findNavController(view);
-                NavDirections navDirections = MainFragmentDirections.actionMainFragmentToCamera2Fragment2();
-                navController.navigate(navDirections);
-            }
+        addNewUserButton.setOnClickListener(view1 -> {
+            final NavController navController = Navigation.findNavController(view1);
+            NavDirections navDirections = MainFragmentDirections.actionMainFragmentToCamera2Fragment2();
+            navController.navigate(navDirections);
         });
+
+        ImageButton qrAuth = view.findViewById(R.id.button_scan_qr_auth);
+        qrAuth.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), QrAuthenticationActivity.class)));
+
 
     }
 
@@ -222,37 +204,28 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         menuList.setAdapter(adapter);
 
         final View fragmentView = view;
-        menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, final View view, int position, long id) {
-                closeDrawer();
-                if (position==0){
-                    PingOne.sendLogs(requireContext(), new PingOne.PingOneSendLogsCallback() {
-                        @Override
-                        public void onComplete(@Nullable final String supportId, @Nullable PingOneSDKError pingOneSDKError) {
-                            if(supportId!=null){
-                                requireActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new AlertDialog.Builder(requireContext())
-                                                .setMessage(getString(R.string.pop_up_logs_sent_message))
-                                                .setPositiveButton(getString(R.string.pop_up_logs_sent_positive_button), new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        dialogInterface.dismiss();
-                                                    }
-                                                })
-                                                .create()
-                                                .show();
-                                        PreferencesManager preferencesManager = new PreferencesManager();
-                                        preferencesManager.setSupportId(requireContext(), supportId);
-                                        populateSupportIdView(fragmentView);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
+        menuList.setOnItemClickListener((adapterView, view1, position, id) -> {
+            closeDrawer();
+            if (position==0){
+                PingOne.sendLogs(requireContext(), (supportId, pingOneSDKError) -> {
+                    if(supportId!=null){
+                        requireActivity().runOnUiThread(() -> {
+                            new AlertDialog.Builder(requireContext())
+                                    .setMessage(getString(R.string.pop_up_logs_sent_message))
+                                    .setPositiveButton(getString(R.string.pop_up_logs_sent_positive_button), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                            PreferencesManager preferencesManager = new PreferencesManager();
+                            preferencesManager.setSupportId(requireContext(), supportId);
+                            populateSupportIdView(fragmentView);
+                        });
+                    }
+                });
             }
         });
     }
@@ -274,47 +247,44 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         notificationSliderTextView = view.findViewById(R.id.text_notification_slider);
     }
 
-    private void updateUserWithLocalBase(User user){
-        if (localUsersArray.isEmpty() || !localUsersArray.containsKey(user.getId())){
-            addRemoteUserToLocalBase(user);
+    private void updateUserWithLocalBase(MainFragmentUserModel mainFragmentUserModel){
+        if (localUsersArray.isEmpty() || !localUsersArray.containsKey(mainFragmentUserModel.getId())){
+            addRemoteUserToLocalBase(mainFragmentUserModel);
         }else{
-            Pair<String, String> p = localUsersArray.get(user.getId());
+            Pair<String, String> p = localUsersArray.get(mainFragmentUserModel.getId());
             if (p==null){
                 p = new Pair<>("","");
             }
-            if(user.getUsername()==null){
-                user.setUsername(new User().new Username("", ""));
-                localUsersArray.put(user.getId(), new Pair<>(p.first, ""));
+            if(mainFragmentUserModel.getUsername()==null){
+                mainFragmentUserModel.setUsername(new MainFragmentUserModel().new Username("", ""));
+                localUsersArray.put(mainFragmentUserModel.getId(), new Pair<>(p.first, ""));
             }else{
-                if(!user.getUsername().getGiven().equals(p.second)){
-                    localUsersArray.put(user.getId(), new Pair<>(p.first, user.getUsername().getGiven()));
+                if(!mainFragmentUserModel.getUsername().getGiven().equals(p.second)){
+                    localUsersArray.put(mainFragmentUserModel.getId(), new Pair<>(p.first, mainFragmentUserModel.getUsername().getGiven()));
                 }
             }
-            user.getUsername().setGiven(Objects.requireNonNull(localUsersArray.get(user.getId())).first);
-            user.setNickname(Objects.requireNonNull(localUsersArray.get(user.getId())).second);
+            mainFragmentUserModel.getUsername().setGiven(Objects.requireNonNull(localUsersArray.get(mainFragmentUserModel.getId())).first);
+            mainFragmentUserModel.setNickname(Objects.requireNonNull(localUsersArray.get(mainFragmentUserModel.getId())).second);
         }
     }
 
-    private void updateLocalBaseWithEditedUser(User user){
-        if (!user.getUsername().getGiven().isEmpty()) {
-            localUsersArray.put(user.getId(), new Pair<>(user.getUsername().getGiven(), user.getNickname()));
+    private void updateLocalBaseWithEditedUser(MainFragmentUserModel mainFragmentUserModel){
+        if (!mainFragmentUserModel.getUsername().getGiven().isEmpty()) {
+            localUsersArray.put(mainFragmentUserModel.getId(), new Pair<>(mainFragmentUserModel.getUsername().getGiven(), mainFragmentUserModel.getNickname()));
         }else{
-            localUsersArray.put(user.getId(), new Pair<>(user.getNickname(), user.getNickname()));
+            localUsersArray.put(mainFragmentUserModel.getId(), new Pair<>(mainFragmentUserModel.getNickname(), mainFragmentUserModel.getNickname()));
         }
 
     }
 
-    /**
-     * adds the user object received from the server to local array
-     * @param user
-     */
-    private void addRemoteUserToLocalBase(User user){
-        adapter.notifyDataSetChanged(user.getId());
-        if (user.getUsername()==null || user.getUsername().getGiven()==null){
-            user.setUsername(new User().new Username("", ""));
+    //add the mainFragmentUserModel object received from the server to local array
+    private void addRemoteUserToLocalBase(MainFragmentUserModel mainFragmentUserModel){
+        adapter.notifyDataSetChanged(mainFragmentUserModel.getId());
+        if (mainFragmentUserModel.getUsername()==null || mainFragmentUserModel.getUsername().getGiven()==null){
+            mainFragmentUserModel.setUsername(new MainFragmentUserModel().new Username("", ""));
         }
-        user.setNickname(user.getUsername().getGiven());
-        localUsersArray.put(user.getId(), new Pair<>(user.getUsername().getGiven(), user.getUsername().getGiven()));
+        mainFragmentUserModel.setNickname(mainFragmentUserModel.getUsername().getGiven());
+        localUsersArray.put(mainFragmentUserModel.getId(), new Pair<>(mainFragmentUserModel.getUsername().getGiven(), mainFragmentUserModel.getUsername().getGiven()));
     }
 
     private void invalidateLocalUsersWithRemote(PreferencesManager preferencesManager){
@@ -322,8 +292,8 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         outer:
         while(it.hasNext()){
             Map.Entry<String, Pair<String, String>> localUser = it.next();
-            for (User user : usersArrayList){
-                if (localUser.getKey().equals(user.getId())){
+            for (MainFragmentUserModel mainFragmentUserModel : usersArrayList){
+                if (localUser.getKey().equals(mainFragmentUserModel.getId())){
                     continue outer;
                 }
             }
@@ -350,19 +320,16 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
      * close the drawer in a smooth way after selecting option
      */
     private void closeDrawer() {
-        Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mDrawerLayout.isDrawerOpen(GravityCompat.END))
-                    mDrawerLayout.closeDrawer(GravityCompat.END);
-            }
+        Runnable mPendingRunnable = () -> {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.END))
+                mDrawerLayout.closeDrawer(GravityCompat.END);
         };
         new Handler().postDelayed(mPendingRunnable, 300);
     }
 
     @Override
-    public void onSave(User editedUser) {
-        updateLocalBaseWithEditedUser(editedUser);
+    public void onSave(MainFragmentUserModel editedMainFragmentUserModel) {
+        updateLocalBaseWithEditedUser(editedMainFragmentUserModel);
         PreferencesManager preferencesManager = new PreferencesManager();
         preferencesManager.storeUsersList(requireContext(), localUsersArray);
     }
@@ -376,12 +343,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                     progressView.setVisibility(View.INVISIBLE);
                     if(shouldRetryPasscode){
                         final Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startOtpSequence();
-                            }
-                        }, 5000);
+                        handler.postDelayed(this::startOtpSequence, 5000);
                         shouldRetryPasscode=false;
                     }
                 }

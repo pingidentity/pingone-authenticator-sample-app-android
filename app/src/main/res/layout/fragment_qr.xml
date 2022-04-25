@@ -42,7 +42,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
                 <androidx.camera.view.PreviewView
-                    android:id="@+id/camera_preview"
+                    android:id="@+id/pairing_camera_preview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
                 <LinearLayout
@@ -64,13 +64,13 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorWhite"
+                        android:textSize="13sp"
+                        android:textColor="@color/color_main_background_white"
                         android:text="@string/pairing_camera_permission_rationale"/>
                     <Button
                         android:id="@+id/button_camera_enable"
                         android:text="@string/enable_button_text"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="@color/color_main_background_white"
                         android:textAllCaps="false"
                         android:textSize="18sp"
                         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="25dp"
                         android:layout_marginStart="25dp"
-                        android:background="@drawable/roundable_button_white"/>
+                        android:background="@drawable/roundable_button_black_white"/>
 
                 </LinearLayout>
 
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@color/colorWhite"
+                android:background="@color/color_main_background_white"
                 android:orientation="vertical">
 
                 <TextView
@@ -95,25 +95,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/pairing_title"
-                    app:autoSizeMaxTextSize="26sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeTextType="uniform" />
+                    android:textSize="22sp"
+                    android:textColor="@color/color_title_text_color"
+                    />
 
                 <TextView
                     android:id="@+id/pairingSubTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="5dp"
                     android:text="@string/pairing_subtitle"
-                    app:autoSizeMaxTextSize="24sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeTextType="uniform" />
+                    android:textSize="13sp"
+                    android:textColor="@color/color_title_text_color"/>
 
                 <EditText
                     android:id="@+id/pairing_key_input"
@@ -127,26 +126,25 @@
                     android:hint="@string/pairing_hint"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
-                    app:autoSizeMaxTextSize="18sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeTextType="uniform"
-                    tools:targetApi="o" />
+                    android:textSize="18sp"
+                    android:textColorHint="@color/color_hint_text_color"
+                    android:textColor="@color/color_title_text_color"
+                    tools:targetApi="o"/>
 
                 <Button
                     android:id="@+id/button_pair"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
-                    android:background="@drawable/roundable_button_blue"
+                    android:background="@drawable/roundable_button_black_blue"
                     android:enabled="false"
                     android:gravity="center"
                     android:stateListAnimator="@null"
                     android:text="@string/pairing_button"
+                    android:textColor="@color/color_title_text_color"
                     android:textAllCaps="false"
-                    app:autoSizeMaxTextSize="18sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeTextType="uniform" />
+                    android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

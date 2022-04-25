@@ -2,38 +2,46 @@
 <RelativeLayout android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorWhite"
+    android:background="@color/color_main_background_white"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/row_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:layout_height="60dp"
+        >
         <TextView
             android:id="@+id/given"
-            android:textSize="22sp"
-            android:padding="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/color_title_text_color"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/family"
-            android:textSize="22sp"
+            android:textSize="18sp"
+            android:textColor="@color/color_title_text_color"
             android:padding="5dp"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <ImageButton
-            android:id="@+id/button_edit"
-            android:layout_alignParentEnd="true"
-            android:background="@color/colorAlpha"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/icon_edit"/>
+
+            <ImageButton
+                android:id="@+id/button_edit"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="15dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@color/colorAlpha"
+                android:src="@mipmap/icon_edit" />
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/editable_row_layout"
         android:visibility="gone"
@@ -55,7 +63,8 @@
         android:layout_height="match_parent">
         <EditText
             android:id="@+id/given_editable"
-            android:textSize="22sp"
+            android:textSize="18sp"
+            android:textColor="@color/color_title_text_color"
             android:padding="5dp"
             android:background="@android:color/transparent"
             android:layout_marginEnd="40dp"
@@ -64,7 +73,6 @@
         <ImageButton
             android:id="@+id/button_clear_editable"
             android:layout_marginStart="-40dp"
-
             android:layout_width="12dp"
             android:layout_height="12dp"
             style="?android:buttonBarButtonStyle"
@@ -83,5 +91,5 @@
         android:layout_width="fill_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="1dp"
-        android:background="@color/colorGreyLight"/>
+        android:background="@color/color_light_grey_borders"/>
 </RelativeLayout>

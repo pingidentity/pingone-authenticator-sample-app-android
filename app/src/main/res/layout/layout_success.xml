@@ -21,6 +21,6 @@
         android:textSize="22sp"
         android:textAppearance="@font/proxima_nova_regular"
 
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_main_background_white"
         android:text="@string/pairing_layout_paired_text"/>
 </RelativeLayout>

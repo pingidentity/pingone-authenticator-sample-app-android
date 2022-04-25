@@ -14,6 +14,8 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -66,22 +68,23 @@ public class PairingFragment extends Fragment {
 
     private void showSuccessLayout(){
         successLayout.setVisibility(View.VISIBLE);
+        drawStatusBar(getResources().getColor(R.color.layout_success_background_color, null));
         PreferencesManager preferencesManager = new PreferencesManager();
         preferencesManager.setIsDeviceActive(requireContext(), true);
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                final NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-                NavDirections action = PairingFragmentDirections.actionPairingFragment2ToMainFragment();
-                navController.navigate(action);
-            }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            drawStatusBar(getResources().getColor(R.color.color_toolbar_background, null));
+            final NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+            NavDirections action = PairingFragmentDirections.actionPairingFragment2ToMainFragment();
+            navController.navigate(action);
         }, 2000);
     }
 
     private void showErrorLayout(String errorMessage){
         errorLayout.setVisibility(View.VISIBLE);
+        drawStatusBar(getResources().getColor(R.color.layout_invalid_background_color, null));
         errorTextView.setText(errorMessage);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            drawStatusBar(getResources().getColor(R.color.color_toolbar_background, null));
             final NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
             NavDirections action = PairingFragmentDirections.actionPairingFragment2ToCamera2Fragment();
             navController.navigate(action);
@@ -90,6 +93,7 @@ public class PairingFragment extends Fragment {
 
     private void showVerifyingLayout(){
         verifyingLayout.setVisibility(View.VISIBLE);
+        drawStatusBar(getResources().getColor(R.color.layout_verifying_background_color, null));
         RotateAnimation rotate = new RotateAnimation(
                 0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f,
@@ -103,6 +107,7 @@ public class PairingFragment extends Fragment {
 
     private void hideVerifyingLayout(){
         verifyingLayout.setVisibility(View.GONE);
+        drawStatusBar(getResources().getColor(R.color.color_toolbar_background, null));
     }
 
     private void tryToPairDevice(String barcode){
@@ -124,15 +129,21 @@ public class PairingFragment extends Fragment {
                         showSuccessLayout();
                     });
                 }else{
-                    if(error.getMessage() != null){
-                        requireActivity().runOnUiThread(() -> {
-                            hideVerifyingLayout();
-                            showErrorLayout(error.getMessage());
-                        });
-                    }
+                    requireActivity().runOnUiThread(() -> {
+                        hideVerifyingLayout();
+                        showErrorLayout(getResources().getString(R.string.pairing_invalid_key));
+                    });
 
                 }
             }
         });
+    }
+
+    //set color of the status bar according to the underlying view
+    private void drawStatusBar(int color){
+        Window window = requireActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(color);
     }
 }

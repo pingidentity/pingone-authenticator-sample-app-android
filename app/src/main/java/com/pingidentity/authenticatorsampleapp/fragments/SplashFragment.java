@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,13 @@ public class SplashFragment extends Fragment {
 
     private static final int SPLASH_DURATION_MILLIS = 1500;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -29,23 +38,25 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                /*
-                 * Create an action that will load the appropriate fragment.
-                 */
-                final NavController navController = Navigation.findNavController(view);
-                PreferencesManager preferencesManager = new PreferencesManager();
-                if(preferencesManager.isDeviceActive(requireContext())){
-                    NavDirections action = SplashFragmentDirections.actionSplashFragmentToMainFragment();
-                    navController.navigate(action);
-                }else{
-                    NavDirections action = SplashFragmentDirections.actionSplashFragmentToCamera2Fragment();
-                    navController.navigate(action);
-                }
+        new Handler().postDelayed(() -> {
+            /*
+             * Create an action that will load appropriate fragment.
+             */
+            final NavController navController = Navigation.findNavController(view);
+            PreferencesManager preferencesManager = new PreferencesManager();
+            if(preferencesManager.isDeviceActive(requireContext())){
+                NavDirections action = SplashFragmentDirections.actionSplashFragmentToMainFragment();
+                navController.navigate(action);
+            }else{
+                NavDirections action = SplashFragmentDirections.actionSplashFragmentToCamera2Fragment();
+                navController.navigate(action);
             }
         }, SPLASH_DURATION_MILLIS);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 }

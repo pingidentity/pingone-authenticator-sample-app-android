@@ -26,7 +26,7 @@
                 android:layout_marginEnd="10dp"
                 android:textSize="14sp"
                 android:textAppearance="@font/proxima_nova_regular"
-                android:textColor="@color/colorGreyLight"
+                android:textColor="@color/color_light_grey_borders"
                 android:textStyle="normal"
                 android:layout_alignParentEnd="true"
                 android:layout_above="@+id/side_menu_text_view_version"/>
@@ -34,7 +34,7 @@
                 android:id="@+id/side_menu_text_view_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGreyLight"
+                android:textColor="@color/color_light_grey_borders"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
                 android:textSize="12sp"
@@ -45,6 +45,7 @@
         </RelativeLayout>
     </com.google.android.material.navigation.NavigationView>
     <FrameLayout
+        android:background="@color/color_main_background_white"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -65,44 +66,48 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/headerBar"
                 layout="@layout/layout_error_slider"/>
-            <androidx.appcompat.widget.Toolbar
+            <RelativeLayout
                 android:id="@+id/headerBar"
                 style="@style/headerBar"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="86dp"
                 android:elevation="4dp">
-                <RelativeLayout
-                    android:id="@+id/layout_header_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <View
-                        android:id="@+id/placeholder_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        style="@style/headerBar"/>
                     <ImageView
                         android:id="@+id/logo_image"
-                        android:layout_below="@+id/placeholder_view"
-                        android:layout_width="140dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="128dp"
+                        android:layout_height="24dp"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/logo_horizontal" />
-                    <RelativeLayout
-                        android:layout_below="@+id/placeholder_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    <Button
-                        android:id="@+id/button_menu"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="10dp"
-                        android:background="@mipmap/icon_menu" />
-                    </RelativeLayout>
-                </RelativeLayout>
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="13dp"
+                        android:src="@drawable/ic_logo_pingidentity_horizontal" />
 
-            </androidx.appcompat.widget.Toolbar>
+
+
+                        <ImageButton
+                            android:id="@+id/button_scan_qr_auth"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="13dp"
+                            android:layout_marginBottom="13dp"
+                            android:background="@drawable/roundable_button_white"
+
+                            android:gravity="center_vertical|center_horizontal"
+                            android:src="@drawable/ic_vector_qr_button" />
+
+
+                        <Button
+                            android:id="@+id/button_menu"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="13dp"
+                            android:layout_marginEnd="13dp"
+                            android:background="@mipmap/icon_menu" />
+
+            </RelativeLayout>
         </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,6 +131,7 @@
                         android:layout_margin="8dp"
                         android:textSize="22sp"
                         android:padding="5dp"
+                        android:textColor="@color/color_title_text_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="@font/proxima_nova_regular"
@@ -135,31 +141,33 @@
                         android:id="@+id/view_divider"
                         android:layout_width="fill_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorGreyLight"/>
+                        android:background="@color/color_light_grey_borders"/>
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                    <ListView
-                        android:id="@+id/list_view_users"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"/>
-                    <ProgressBar
-                        android:id="@+id/progress_bar_get_info"
-                        android:layout_centerInParent="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:indeterminate="true"
-                        android:visibility="gone"/>
+
+                        <ListView
+                            android:id="@+id/list_view_users"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp" />
+                        <ProgressBar
+                            android:id="@+id/progress_bar_get_info"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"/>
                     </RelativeLayout>
                     <Button
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="25dp"
                         android:id="@+id/button_new_user"
                         android:stateListAnimator="@null"
-                        android:padding="10dp"
                         android:text="@string/main_view_new_button_text"
+                        android:textSize="18sp"
+                        android:textColor="@color/color_button_blue_enabled"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/roundable_button" />
+                        android:layout_height="40dp"
+                        style="@style/roundable_button_blue"/>
 
                 </LinearLayout>
             </LinearLayout>

@@ -9,24 +9,22 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.pingidentity.authenticatorsampleapp.R;
-import com.pingidentity.authenticatorsampleapp.models.User;
-
-import org.jose4j.lang.StringUtil;
+import com.pingidentity.authenticatorsampleapp.models.MainFragmentUserModel;
 
 import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class UsersAdapter extends ArrayAdapter<User> {
+public class UsersAdapter extends ArrayAdapter<MainFragmentUserModel> {
 
-    private Context context;
-    private AdapterSaveCallback callback;
+    private final Context context;
+    private final AdapterSaveCallback callback;
 
     private String lastAddedUserId;
     /*
@@ -34,20 +32,20 @@ public class UsersAdapter extends ArrayAdapter<User> {
      */
     private final ReentrantLock lock = new ReentrantLock();
 
-    public UsersAdapter(Context context, ArrayList<User> users, AdapterSaveCallback callback){
-        super(context, R.layout.row_user, users);
+    public UsersAdapter(Context context, ArrayList<MainFragmentUserModel> mainFragmentUserModels, AdapterSaveCallback callback){
+        super(context, R.layout.row_user, mainFragmentUserModels);
         this.context = context;
         this.callback = callback;
     }
 
     public interface AdapterSaveCallback {
-        void onSave(User user);
+        void onSave(MainFragmentUserModel mainFragmentUserModel);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final User user = getItem(position);
+        final MainFragmentUserModel mainFragmentUserModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         final ViewHolder viewHolder; // view lookup cache stored in tag
         if (convertView == null) {
@@ -71,40 +69,30 @@ public class UsersAdapter extends ArrayAdapter<User> {
         }
         // Populate the data from the data object via the viewHolder object
         // into the template view.
-        if(user!=null && user.getUsername()!=null && user.getUsername().getGiven()!=null && !user.getUsername().getGiven().isEmpty()) {
-            viewHolder.given.setText(user.getUsername().getGiven());
+        if(mainFragmentUserModel !=null && mainFragmentUserModel.getUsername()!=null &&
+                mainFragmentUserModel.getUsername().getGiven()!=null &&
+                !mainFragmentUserModel.getUsername().getGiven().isEmpty()) {
+            viewHolder.given.setText(mainFragmentUserModel.getUsername().getGiven());
             //simplest method to open edit mode with cursor position at the end
             viewHolder.givenEditable.setText(null);
-            viewHolder.givenEditable.append(user.getUsername().getGiven());
+            viewHolder.givenEditable.append(mainFragmentUserModel.getUsername().getGiven());
             viewHolder.family.setText("");
         } else {
             viewHolder.given.setText(context.getResources().getString(R.string.username_placeholder));
             viewHolder.family.setText(position+1>=10?String.format("%s", position+1):String.format("0%s", position+1));
         }
-        if(user!=null && user.getId().equals(lastAddedUserId)){
+        if(mainFragmentUserModel !=null && mainFragmentUserModel.getId().equals(lastAddedUserId)){
             showEditLayoutForRow(viewHolder);
         }
 
-        viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditLayoutForRow(viewHolder);
-            }
-        });
+        viewHolder.imageButtonEdit.setOnClickListener(view ->
+                showEditLayoutForRow(viewHolder));
 
-        viewHolder.imageButtonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideEditLayoutForRow(user, viewHolder);
-            }
-        });
+        viewHolder.imageButtonSave.setOnClickListener(view ->
+                hideEditLayoutForRow(mainFragmentUserModel, viewHolder));
 
-        viewHolder.imageButtonClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolder.givenEditable.setText("");
-            }
-        });
+        viewHolder.imageButtonClear.setOnClickListener(v ->
+                viewHolder.givenEditable.setText(""));
         // Return the completed view to render on screen
         return convertView;
     }
@@ -130,15 +118,15 @@ public class UsersAdapter extends ArrayAdapter<User> {
         }
     }
 
-    private void hideEditLayoutForRow(@Nullable User user, ViewHolder viewHolder){
+    private void hideEditLayoutForRow(@Nullable MainFragmentUserModel mainFragmentUserModel, ViewHolder viewHolder){
         lock.unlock();
-        if (user!=null && user.getUsername()!=null) {
+        if (mainFragmentUserModel !=null && mainFragmentUserModel.getUsername()!=null) {
             if (viewHolder.givenEditable.getText().length()==0){
-                //user saves an empty string
-                viewHolder.givenEditable.setText(user.getNickname());
+                //mainFragmentUserModel saves an empty string
+                viewHolder.givenEditable.setText(mainFragmentUserModel.getNickname());
             }
-            user.getUsername().setGiven(viewHolder.givenEditable.getText().toString());
-            callback.onSave(user);
+            mainFragmentUserModel.getUsername().setGiven(viewHolder.givenEditable.getText().toString());
+            callback.onSave(mainFragmentUserModel);
         }
         lastAddedUserId = null;
         notifyDataSetInvalidated();
@@ -153,7 +141,7 @@ public class UsersAdapter extends ArrayAdapter<User> {
 
     private static class ViewHolder {
         LinearLayout editableLayout;
-        LinearLayout rowLayout;
+        RelativeLayout rowLayout;
         TextView given;
 
         EditText givenEditable;

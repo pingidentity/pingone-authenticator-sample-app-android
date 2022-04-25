@@ -20,6 +20,6 @@
         android:textAppearance="@font/proxima_nova_regular"
         android:padding="10dp"
         android:textSize="22sp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_main_background_white"
         android:text="@string/auth_success_layout_message"/>
 </RelativeLayout>

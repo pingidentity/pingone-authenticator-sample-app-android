@@ -1,5 +1,8 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,9 +20,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.experimental.UseExperimental;
+import androidx.annotation.OptIn;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -27,43 +32,35 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.mlkit.vision.barcode.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
 import com.pingidentity.authenticatorsampleapp.R;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
 
 public class QrReaderFragment extends Fragment {
 
     private PreviewView previewView;
 
     /*
-     * permission request codes (need to be < 256)
+     * Blocking camera operations are performed using this executor
      */
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
-
-    private final double  RATIO_4_3_VALUE = 4.0 / 3.0;
-    private final double RATIO_16_9_VALUE = 16.0 / 9.0;
-
-    /** Blocking camera operations are performed using this executor */
     private ExecutorService cameraExecutor;
+
+    /*
+     * ActivityResultLauncher, as an instance variable.
+     */
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     private  NavController controller;
     private boolean detected = false;
@@ -87,13 +84,28 @@ public class QrReaderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        /*
+         * Register the permissions callback, which handles the user's response to the
+         * system permissions dialog.
+         */
+         requestPermissionLauncher =
+                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    if (isGranted) {
+                        // Permission is granted. Continue the action or workflow in your
+                        // app.
+                        startCameraPreview();
+                    } else {
+                        // Explain to the user that the feature is unavailable because the
+                        // features requires a permission that the user has denied.
+                        showCameraDisabledLayout();
+                    }
+                });
         controller = Navigation.findNavController(view);
 
         // Initialize background executor each time the view is recreated
         cameraExecutor = Executors.newSingleThreadExecutor();
 
-        previewView = view.findViewById(R.id.camera_preview);
+        previewView = view.findViewById(R.id.pairing_camera_preview);
 
         cameraDisableLayout = view.findViewById(R.id.layout_camera_disabled);
 
@@ -110,7 +122,15 @@ public class QrReaderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                pairingButton.setEnabled(charSequence.length() == 14);
+                if (charSequence.length()==14){
+                    pairingButton.setEnabled(true);
+                    pairingButton.setTextColor(getResources().
+                            getColor(R.color.color_button_blue_enabled, null));
+                }else{
+                    pairingButton.setEnabled(false);
+                    pairingButton.setTextColor(getResources().
+                            getColor(R.color.color_title_text_color, null));
+                }
             }
 
             @Override
@@ -135,30 +155,17 @@ public class QrReaderFragment extends Fragment {
     public void onResume() {
         super.onResume();
         /*
-         * Check for the camera permission before accessing the camera.  If the
+         * Check for the camera permission before accessing the camera. If the
          * permission is not granted yet, request permission.
          */
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) ==
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) ==
                 PackageManager.PERMISSION_GRANTED) {
             hideCameraDisabledLayout();
             startCameraPreview();
-        } else {
+        }else if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
             showCameraDisabledLayout();
-            requestCameraPermission();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        // If request is cancelled, the result arrays are empty.
-        if (requestCode == RC_HANDLE_CAMERA_PERM) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // permission was granted
-            } else {
-                showCameraDisabledLayout();
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request.
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA);
         }
     }
 
@@ -185,7 +192,7 @@ public class QrReaderFragment extends Fragment {
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
-        final ListenableFuture futureCameraProvider = ProcessCameraProvider.getInstance(requireContext());
+        final ListenableFuture<ProcessCameraProvider> futureCameraProvider = ProcessCameraProvider.getInstance(requireContext());
         futureCameraProvider.addListener(() -> {
             try{
                 ProcessCameraProvider processCameraProvider = (ProcessCameraProvider) futureCameraProvider.get();
@@ -197,7 +204,7 @@ public class QrReaderFragment extends Fragment {
                         // Set initial target rotation
                         .setTargetRotation(rotation)
                         .build();
-               preview.setSurfaceProvider(previewView.createSurfaceProvider());
+               preview.setSurfaceProvider(cameraExecutor, previewView.getSurfaceProvider());
 
                 //QrCode analyzer
                 ImageAnalysis analysis = new ImageAnalysis.Builder()
@@ -233,16 +240,17 @@ public class QrReaderFragment extends Fragment {
      */
     private int aspectRatio(int width, int height) {
         double previewRatio = (double) Math.max(width, height) /min(width, height);
+        double RATIO_16_9_VALUE = 16.0 / 9.0;
+        double RATIO_4_3_VALUE = 4.0 / 3.0;
         if (abs(previewRatio - RATIO_4_3_VALUE) <= abs(previewRatio - RATIO_16_9_VALUE)) {
             return AspectRatio.RATIO_4_3;
         }
         return AspectRatio.RATIO_16_9;
     }
 
-
+    @OptIn(markerClass = androidx.camera.core.ExperimentalGetImage.class)
     private class QrCodeAnalyzer implements ImageAnalysis.Analyzer{
 
-        @UseExperimental(markerClass = androidx.camera.core.ExperimentalGetImage.class)
         @Override
         public void analyze(@NonNull ImageProxy imageProxy) {
             Image image = imageProxy.getImage();
@@ -253,7 +261,7 @@ public class QrReaderFragment extends Fragment {
                     InputImage.fromMediaImage(image, imageProxy.getImageInfo().getRotationDegrees());
             BarcodeScanner scanner = BarcodeScanning.getClient();
 
-            Task<List<Barcode>> result = scanner.process(inputImage)
+            scanner.process(inputImage)
                     .addOnSuccessListener(barcodes -> {
                         if (barcodes.size() > 0 && !detected) {
                             detected = true;
@@ -285,31 +293,6 @@ public class QrReaderFragment extends Fragment {
         });
     }
 
-    /*
-     * Handles the requesting of the camera permission.
-     */
-    private void requestCameraPermission() {
-
-        final String[] permissions = new String[]{Manifest.permission.CAMERA};
-        /*
-         * returns true if the user has previously denied the request, and returns false if a user
-         * has denied a permission and selected the Don't ask again option in the permission request
-         * dialog
-         */
-        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
-                Manifest.permission.CAMERA)) {
-            /*
-             * Show an explanation to the user *asynchronously* -- don't block
-             * this thread waiting for the user's response! After the user
-             * sees the explanation, try again to request the permission.
-             */
-            showCameraDisabledLayout();
-        } else {
-            requestPermissions(permissions, RC_HANDLE_CAMERA_PERM);
-        }
-
-    }
-
     private void openApplicationSettings(){
         /*
          * Opens Details setting page for App.
@@ -336,10 +319,6 @@ public class QrReaderFragment extends Fragment {
         intent.setData(uri);
         startActivity(intent);
     }
-
-
-
-
 
     private void showCameraDisabledLayout(){
         cameraDisableLayout.setVisibility(View.VISIBLE);
