@@ -7,6 +7,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import com.pingidentity.authenticatorsampleapp.R;
+import com.pingidentity.pingidsdkv2.PingOneSDKError;
 
 /*
  * This class will contain methods that any activity/fragment
@@ -45,6 +46,14 @@ public class UserInterfaceUtil {
         textView.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_down);
         textView.startAnimation(animation);
+    }
+
+    public static String handlePingOneSDKErrorMessage(Context context, PingOneSDKError error){
+        if (String.valueOf(error.getCode()).startsWith("1")){
+            return error.getMessage();
+        }else{
+            return context.getResources().getString(R.string.generic_string_error);
+        }
     }
 
 }

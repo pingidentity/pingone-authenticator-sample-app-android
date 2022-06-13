@@ -28,6 +28,7 @@ import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.authenticatorsampleapp.adapters.QrAuthUserListAdapter;
 import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
 import com.pingidentity.authenticatorsampleapp.models.QrAuthUserModel;
+import com.pingidentity.authenticatorsampleapp.util.UserInterfaceUtil;
 import com.pingidentity.pingidsdkv2.AuthenticationObject;
 import com.pingidentity.pingidsdkv2.PingOne;
 
@@ -106,12 +107,17 @@ public class QrAuthenticationParserFragment extends Fragment implements QrAuthUs
                 (authenticationObject, pingOneSDKError) -> {
             hideVerifyingLayout();
             if(pingOneSDKError!=null){
-                showErrorLayout(getResources().getString(R.string.generic_string_error));
+                showErrorLayout(UserInterfaceUtil.
+                        handlePingOneSDKErrorMessage(requireContext(), pingOneSDKError));
             }else{
                 if(authenticationObject!=null) {
                     this.authenticationObject = authenticationObject;
                     parseAuthenticationObject();
                 }else{
+                    /*
+                     * should never get there, authenticationObject and PingOneSDKError
+                     * cannot be null at the same time
+                     */
                     showErrorLayout(getResources().getString(R.string.generic_string_error));
                 }
             }
@@ -242,7 +248,8 @@ public class QrAuthenticationParserFragment extends Fragment implements QrAuthUs
         return (status, pingOneSDKError) -> {
             hideVerifyingLayout();
             if (pingOneSDKError!=null){
-                showErrorLayout(getResources().getString(R.string.generic_string_error));
+                showErrorLayout(UserInterfaceUtil
+                        .handlePingOneSDKErrorMessage(requireContext(), pingOneSDKError));
             }else if(status!=null){
                 switch (status){
                     case "COMPLETED":
