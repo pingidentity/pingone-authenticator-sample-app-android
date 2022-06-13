@@ -199,7 +199,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
         for (int i=0; i<menu.size(); i++){
             arrayList.add(menu.getItem(i));
         }
-        SideMenuAdapter adapter = new SideMenuAdapter(requireContext(), arrayList);
+        SideMenuAdapter adapter = new SideMenuAdapter(requireActivity(), arrayList);
         menuList.setDivider(null);
         menuList.setAdapter(adapter);
 
@@ -210,7 +210,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                 PingOne.sendLogs(requireContext(), (supportId, pingOneSDKError) -> {
                     if(supportId!=null){
                         requireActivity().runOnUiThread(() -> {
-                            new AlertDialog.Builder(requireContext())
+                            AlertDialog dialog = new AlertDialog.Builder(requireContext())
                                     .setMessage(getString(R.string.pop_up_logs_sent_message))
                                     .setPositiveButton(getString(R.string.pop_up_logs_sent_positive_button), new DialogInterface.OnClickListener() {
                                         @Override
@@ -218,11 +218,15 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                                             dialogInterface.dismiss();
                                         }
                                     })
-                                    .create()
-                                    .show();
-                            PreferencesManager preferencesManager = new PreferencesManager();
-                            preferencesManager.setSupportId(requireContext(), supportId);
-                            populateSupportIdView(fragmentView);
+                                    .create();
+                        dialog.show();
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).
+                                setTextColor(getResources().getColor(R.color.colorBlack, null));
+
+
+                        PreferencesManager preferencesManager = new PreferencesManager();
+                        preferencesManager.setSupportId(requireContext(), supportId);
+                        populateSupportIdView(fragmentView);
                         });
                     }
                 });

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class SideMenuAdapter extends ArrayAdapter<MenuItem> {
 
-    private ArrayList<MenuItem> items;
+    private final ArrayList<MenuItem> items;
     public SideMenuAdapter(Context context, ArrayList<MenuItem> menuItems){
         super(context, R.layout.row_side_menu, menuItems);
         this.items = menuItems;

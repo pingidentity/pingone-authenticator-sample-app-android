@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.pingidentity.authenticatorsampleapp.R;
 import com.pingidentity.authenticatorsampleapp.managers.PreferencesManager;
+import com.pingidentity.authenticatorsampleapp.util.UserInterfaceUtil;
 import com.pingidentity.pingidsdkv2.PingOne;
 import com.pingidentity.pingidsdkv2.PingOneSDKError;
 import com.pingidentity.pingidsdkv2.types.PairingInfo;
@@ -131,7 +132,8 @@ public class PairingFragment extends Fragment {
                 }else{
                     requireActivity().runOnUiThread(() -> {
                         hideVerifyingLayout();
-                        showErrorLayout(getResources().getString(R.string.pairing_invalid_key));
+                        showErrorLayout(UserInterfaceUtil
+                                .handlePingOneSDKErrorMessage(requireContext(), error));
                     });
 
                 }

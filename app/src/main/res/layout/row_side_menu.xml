@@ -14,7 +14,7 @@
         android:id="@+id/text_view_menu"
         android:background="@color/color_main_background_white"
         android:textAppearance="@font/proxima_nova_regular"
-        android:textColor="@color/blueLight"
+        android:textColor="@color/color_button_blue_enabled"
         android:textSize="22sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

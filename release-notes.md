@@ -1,5 +1,26 @@
 # Release Notes
 
+
+## v1.4.1 - June 13th, 2022
+Features:
+ 
+- Updated SDK to version 1.7.1.
+
+ Compatibility:
+
+ - Dependencies are updated to their latest versions:
+     * In the 'build.gradle' file at the **project** level:
+       * 'com.android.tools.build:gradle:**7.1.2**'
+       * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.4.1**'
+     * In the 'build.gradle' file at the **app** level:
+       * 'com.google.mlkit:barcode-scanning:**17.0.2**'
+       * 'com.google.android.gms:play-services-safetynet:**18.0.1**'
+       * 'com.google.code.gson:gson:**2.8.9**'
+       * 'org.bitbucket.b_c:jose4j:**0.7.9**'
+       * 'androidx.camera:camera-lifecycle:**1.0.2**'
+       * 'androidx.camera:camera-view:**1.0.0-alpha30**'
+
+
 ## v1.4.0 - April 25th, 2022
 Features:
 

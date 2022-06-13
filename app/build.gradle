@@ -33,13 +33,13 @@ android {
          * Warning: The greatest value Google Play allows for this field is 2100000000.
          * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
          */
-        versionCode = 12
+        versionCode = 13
         /*
          * The next variable is a string so that you can describe the app version as a
          * <major>.<minor>.<point> string, or as any other type of absolute or relative
          * version identifier. The value has no purpose other than to be displayed to users.
          */
-        versionName "1.4.0"
+        versionName "1.4.1"
 
         /*
          * This is the variable that is injected into build config, while building the application.
@@ -76,23 +76,23 @@ dependencies {
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation "com.google.android.gms:play-services-safetynet:18.0.0"
+    implementation "com.google.android.gms:play-services-safetynet:18.0.1"
 
     /*
      * ML Kit is a mobile SDK that brings Google's on-device machine learning expertise to a device
      * ML Kit's APIs all run on-device, allowing for real-time use cases where you want to process
      * a live camera stream. This also means that the functionality is available offline.
      */
-    implementation 'com.google.mlkit:barcode-scanning:17.0.0'
+    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
 
     /*
      * The jose.4.j library is an open source (Apache 2.0) implementation of JWT and the JOSE
      * specification suite
      */
-    implementation 'org.bitbucket.b_c:jose4j:0.7.1'
+    implementation 'org.bitbucket.b_c:jose4j:0.7.9'
 
     //Google's gSon library to build and parse JSON format
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     /*
      * The library that provides ability to use Certificate Transparency
