@@ -125,11 +125,12 @@
                     android:gravity="center"
                     android:hint="@string/pairing_hint"
                     android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
+                    android:inputType="textCapCharacters"
+                    android:maxLength="18"
                     android:textSize="18sp"
                     android:textColorHint="@color/color_hint_text_color"
                     android:textColor="@color/color_title_text_color"
-                    tools:targetApi="o"/>
+                    />
 
                 <Button
                     android:id="@+id/button_pair"

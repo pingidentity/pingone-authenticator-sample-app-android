@@ -122,7 +122,7 @@ public class QrReaderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                if (charSequence.length()==14){
+                if (charSequence.length()==14 || charSequence.length()==18){
                     pairingButton.setEnabled(true);
                     pairingButton.setTextColor(getResources().
                             getColor(R.color.color_button_blue_enabled, null));

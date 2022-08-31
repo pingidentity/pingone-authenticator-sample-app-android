@@ -118,7 +118,7 @@ public class PairingFragment extends Fragment {
 
         PingOne.pair(requireContext(), barcode, new PingOne.PingOneSDKPairingCallback() {
             @Override
-            public void onComplete(PairingInfo pairingInfo, @Nullable PingOneSDKError error) {
+            public void onComplete(@Nullable PairingInfo pairingInfo, @Nullable PingOneSDKError error) {
                 this.onComplete(error);
             }
 

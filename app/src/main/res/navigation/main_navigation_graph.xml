@@ -23,6 +23,11 @@
             app:destination="@id/camera2Fragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_notificationsPermissionFragment"
+            app:destination="@id/notificationsPermissionFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -66,6 +71,22 @@
             android:id="@+id/action_pairingFragment2_to_camera2Fragment"
             app:destination="@id/camera2Fragment"
             app:popUpTo="@id/pairingFragment2"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationsPermissionFragment"
+        android:name="com.pingidentity.authenticatorsampleapp.fragments.NotificationsPermissionFragment"
+        android:label="fragment_notifications_permission"
+        tools:layout="@layout/fragment_notifications_permission" >
+        <action
+            android:id="@+id/action_notificationsPermissionFragment_to_camera2Fragment"
+            app:destination="@id/camera2Fragment"
+            app:popUpTo="@id/notificationsPermissionFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_notificationsPermissionFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/notificationsPermissionFragment"
             app:popUpToInclusive="true" />
     </fragment>
 

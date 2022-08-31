@@ -1,6 +1,11 @@
 <resources>
 
     <string name="generic_string_error">Error</string>
+
+    <!--NotificationsPermission fragment-->
+    <string name="notifications_permission_title">Notifications</string>
+    <string name="notifications_permission_subtitle">%s requires notifications to be enabled to receive authentication requests and will not work otherwise. You will only receive notifications for authentication.</string>
+
     <!--Pairing screen-->
 
     <string name="enable_button_text">Enable</string>
@@ -21,7 +26,8 @@
     <string name="main_view_new_button_text">Add Account</string>
     <string name="main_view_qr_auth_button_text">QR Auth</string>
     <string name="main_view_send_logs_title">Send Logs</string>
-    <string name="pop_up_logs_sent_message">Logs sent</string>
+    <string name="pop_up_logs_sent_title">Logs sent</string>
+    <string name="pop_up_logs_sent_message">Logs sent successfully. You can find your support ID on the side menu.</string>
     <string name="pop_up_logs_sent_positive_button">OK</string>
     <string name="main_view_support_id_placeholder">Support ID: %s</string>
     <string name="main_view_version_placeholder">V%s(000%d)</string>
@@ -69,6 +75,5 @@
     <string name="qr_auth_title_single_user">Approve account</string>
     <string name="qr_auth_title_multiply_users">Select account</string>
     <string name="qr_auth_subtitle_multiply_users">Select one of the listed accounts to authenticate with.</string>
-
 
 </resources>
