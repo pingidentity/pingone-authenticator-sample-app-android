@@ -113,9 +113,8 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                 if (usersArray.size()==0){
                     //last user was unpaired from the server
                     preferencesManager.setIsDeviceActive(requireContext(), false);
-                    Navigation.findNavController(innerView)
-                            .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment());
-
+                    requireActivity().runOnUiThread(() -> Navigation.findNavController(innerView)
+                            .navigate(MainFragmentDirections.actionMainFragmentToCamera2Fragment()));
                 }
                 for(JsonElement user : usersArray){
                     MainFragmentUserModel mainFragmentUserModel = new Gson().fromJson(user, MainFragmentUserModel.class);
@@ -211,6 +210,7 @@ public class MainFragment extends Fragment implements UsersAdapter.AdapterSaveCa
                     if(supportId!=null){
                         requireActivity().runOnUiThread(() -> {
                             AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                    .setTitle(R.string.pop_up_logs_sent_title)
                                     .setMessage(getString(R.string.pop_up_logs_sent_message))
                                     .setPositiveButton(getString(R.string.pop_up_logs_sent_positive_button), new DialogInterface.OnClickListener() {
                                         @Override

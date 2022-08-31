@@ -1,15 +1,18 @@
 package com.pingidentity.authenticatorsampleapp.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -44,9 +47,23 @@ public class SplashFragment extends Fragment {
              */
             final NavController navController = Navigation.findNavController(view);
             PreferencesManager preferencesManager = new PreferencesManager();
-            if(preferencesManager.isDeviceActive(requireContext())){
+            /*
+             * navigate to NotificationsPermission fragment if needed
+             */
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED && !preferencesManager.isNotificationsPermissionDenied(requireContext())) {
+                NavDirections action = SplashFragmentDirections.actionSplashFragmentToNotificationsPermissionFragment();
+                navController.navigate(action);
+            /*
+             * navigate to main fragment if device is active
+             */
+            }else if(preferencesManager.isDeviceActive(requireContext())){
                 NavDirections action = SplashFragmentDirections.actionSplashFragmentToMainFragment();
                 navController.navigate(action);
+            /*
+             * navigate to pairing fragment
+             */
             }else{
                 NavDirections action = SplashFragmentDirections.actionSplashFragmentToCamera2Fragment();
                 navController.navigate(action);

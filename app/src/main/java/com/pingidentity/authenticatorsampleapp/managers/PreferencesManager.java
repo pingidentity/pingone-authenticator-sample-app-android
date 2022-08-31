@@ -19,6 +19,7 @@ public class PreferencesManager {
     //keys to the stored prefs
     private static final String SUPPORT_ID_KEY = "support_id";
     private static final String IS_DEVICE_ACTIVE = "is_device_active";
+    private static final String IS_NOTIFICATIONS_PERMISSION_DENIED = "is_notifications_permission_denied";
     private static final String USERS_LIST = "users_list";
 
     public PreferencesManager(){}
@@ -57,6 +58,14 @@ public class PreferencesManager {
 
     public boolean isDeviceActive(Context context){
         return getBooleanEntry(context, IS_DEVICE_ACTIVE);
+    }
+
+    public void setIsNotificationPermissionStatusDenied(Context context, boolean isGranted){
+        addBooleanEntry(context, IS_NOTIFICATIONS_PERMISSION_DENIED, isGranted);
+    }
+
+    public boolean isNotificationsPermissionDenied(Context context){
+        return getBooleanEntry(context, IS_NOTIFICATIONS_PERMISSION_DENIED);
     }
 
     public void storeUsersList(Context context, LinkedHashMap<String, Pair<String, String>> value){
