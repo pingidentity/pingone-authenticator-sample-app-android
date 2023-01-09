@@ -1,6 +1,36 @@
 # Release Notes
 
 
+## v1.5.1 - Jan 9th, 2023
+Features:
+
+- Updated SDK to version 1.8.1
+- Added support for different push message categories.
+- Sensitive screens are protected from recording.
+
+Compatibility:
+
+- Dependencies updated to their latest versions:
+    * In the 'build.gradle' file at the **project** level:
+        * 'com.google.gms:google-services:**4.3.14**'
+        * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.5.3**'
+    * In the 'build.gradle' file at the **app** level:
+        * 'com.google.code.gson:gson:**2.9.0**'
+- Dependencies added:
+    * In the 'build.gradle' file at the **app** level:
+        * 'com.pingidentity.pingonemfa:android-sdk:1.8.1'
+- Dependencies removed from the project:
+    * In the 'build.gradle' file at the **app** level:
+        * 'org.slf4j:slf4j-api:1.7.30'
+        * 'com.github.tony19:logback-android:2.0.0'
+        * 'com.madgag.spongycastle:core:1.58.0.0'
+        * 'com.madgag.spongycastle:bcpkix-jdk15on:1.58.0.0'
+        * 'com.google.android.gms:play-services-vision:20.1.3'
+        * 'com.google.android.gms:play-services-safetynet:18.0.1'
+        * 'org.bitbucket.b_c:jose4j:0.7.9'
+        * 'com.appmattus.certificatetransparency:certificatetransparency-android:1.0.0'
+
+    
 ## v1.4.2 - Aug 31st, 2022
 Features:
 
@@ -18,6 +48,7 @@ Compatibility:
         * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.5.1**'
     * In the 'build.gradle' file at the **app** level:
         * 'com.google.code.gson:gson:**2.9.0**'
+
 
 ## v1.4.1 - June 13th, 2022
 Features:
@@ -145,3 +176,4 @@ Features:
 - Override usernames locally, or use names from PingOne directory.
 - Authentication flow with push notifications using biometric recognition to approve authentication.
 - Side menu with send logs option to track customer issues with support ID.
+- 

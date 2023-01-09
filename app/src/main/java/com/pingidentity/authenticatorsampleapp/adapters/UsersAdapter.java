@@ -79,7 +79,7 @@ public class UsersAdapter extends ArrayAdapter<MainFragmentUserModel> {
             viewHolder.family.setText("");
         } else {
             viewHolder.given.setText(context.getResources().getString(R.string.username_placeholder));
-            viewHolder.family.setText(position+1>=10?String.format("%s", position+1):String.format("0%s", position+1));
+            viewHolder.given.append(position+1>=10?String.format(" %s", position+1):String.format(" 0%s", position+1));
         }
         if(mainFragmentUserModel !=null && mainFragmentUserModel.getId().equals(lastAddedUserId)){
             showEditLayoutForRow(viewHolder);
