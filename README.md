@@ -36,9 +36,9 @@ This file will be needed in the installation
 android {
     defaultConfig {
         applicationId "com.pingidentity.authenticatorsampleapp"
-        ...
+        //...
     }
-    ...
+    //...
 }
 ```
 should be changed to:
@@ -46,9 +46,9 @@ should be changed to:
 android {
     defaultConfig {
         applicationId "com.example.myapp" //your package name
-        ...
+        //...
     }
-    ...
+    //...
 }
 ```
 3. Copy and paste the ```google-services.json``` file received from Firebase into the ```app``` folder.
@@ -70,10 +70,7 @@ At this point you can build and run the app.
 
 ## Device Integrity validation
 To enable device integrity validation on the mobile side you need to retrieve SafetyNet ApiKey. Refer to [Obtain a SafetyNet API Key] for exact instructions.
-The retrieved ApiKey should replace the placeholder in the file `app/gradle.properties`, for example:
-```properties
-safetynet_api_key = "AIIZa..."
-```
+The retrieved ApiKey should replace the placeholder in the file `app/gradle.properties`, for example: `safetynet_api_key = "AIIZa..."`
 
 [Setup a mobile app]: <https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
 [Firebase project set-up guidelines]:<https://firebase.google.com/docs/android/setup?authuser=0#register-app>

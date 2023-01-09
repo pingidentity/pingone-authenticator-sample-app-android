@@ -35,13 +35,13 @@ android {
          * Warning: The greatest value Google Play allows for this field is 2100000000.
          * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
          */
-        versionCode = 14
+        versionCode = 15
         /*
          * The next variable is a string so that you can describe the app version as a
          * <major>.<minor>.<point> string, or as any other type of absolute or relative
          * version identifier. The value has no purpose other than to be displayed to users.
          */
-        versionName "1.4.2"
+        versionName "1.5.1"
 
         /*
          * This is the variable that is injected into build config, while building the application.
@@ -60,65 +60,46 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+        }
     }
 
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
-
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'com.github.tony19:logback-android:2.0.0'
-
-    implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation 'com.madgag.spongycastle:bcpkix-jdk15on:1.58.0.0'
+    /*
+     * Import the PingOne for Customers Android SDK. Get the latest version from
+     * https://search.maven.org/search?q=g:com.pingidentity.pingonemfa
+     */
+    implementation 'com.pingidentity.pingonemfa:android-sdk:1.8.1'
 
     //Import the Firebase BoM (Bill of Materials)
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     //FireCloud Messaging Services
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-messaging'
-    implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation "com.google.android.gms:play-services-safetynet:18.0.1"
 
     /*
      * ML Kit is a mobile SDK that brings Google's on-device machine learning expertise to a device
      * ML Kit's APIs all run on-device, allowing for real-time use cases where you want to process
      * a live camera stream. This also means that the functionality is available offline.
      */
-    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
-
-    /*
-     * The jose.4.j library is an open source (Apache 2.0) implementation of JWT and the JOSE
-     * specification suite
-     */
-    implementation 'org.bitbucket.b_c:jose4j:0.7.9'
+    implementation 'com.google.mlkit:barcode-scanning:17.0.3'
 
     //Google's gSon library to build and parse JSON format
     implementation 'com.google.code.gson:gson:2.9.0'
 
-    /*
-     * The library that provides ability to use Certificate Transparency
-     * https://www.certificate-transparency.org
-     */
-    implementation("com.appmattus.certificatetransparency:certificatetransparency-android:1.0.0")
-
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment:2.5.1'
-    implementation 'androidx.navigation:navigation-ui:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation "androidx.drawerlayout:drawerlayout:1.1.1"
-
 
     /*
      * To display a system prompt that requests the user to authenticate
      * using biometric credentials, use the Biometric library.
      */
     implementation 'androidx.biometric:biometric:1.1.0'
-
-
 
     // Use the most recent version of CameraX
     def camerax_version = '1.1.0'
@@ -127,7 +108,5 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha30"
-
-    //implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 }

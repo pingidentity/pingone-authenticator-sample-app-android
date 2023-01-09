@@ -44,6 +44,8 @@
 
     <string name="notification_default_title">PingOne Authentication Request</string>
     <string name="notification_default_subtitle">You have a new authentication request.</string>
+    <string name="notification_action_approve">Approve</string>
+    <string name="notification_action_deny">Deny</string>
 
 
     <!--Content description used for automation testing-->
