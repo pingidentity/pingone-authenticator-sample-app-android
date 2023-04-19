@@ -15,6 +15,6 @@ public class AuthenticatorSampleApp extends Application {
          * call Firebase.initializeApp() before using any Firebase product
          */
         FirebaseApp.initializeApp(this);
-        PingOne.setSafetyNetApiKey(this, BuildConfig.API_KEY);
+        PingOne.setGooglePlayIntegrityProjectNumber(this, BuildConfig.GOOGLE_CLOUD_PROJECT_NUMBER);
     }
 }

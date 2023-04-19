@@ -69,13 +69,14 @@ At this point you can build and run the app.
 
 
 ## Device Integrity validation
-To enable device integrity validation on the mobile side you need to retrieve SafetyNet ApiKey. Refer to [Obtain a SafetyNet API Key] for exact instructions.
-The retrieved ApiKey should replace the placeholder in the file `app/gradle.properties`, for example: `safetynet_api_key = "AIIZa..."`
+To enable device integrity validation on the mobile side, you must pass the project number of the Google Cloud project where you enabled the Play Integrity API.
+See [Setup Google Play Integrity API] for detailed instructions on enabling the API.
+Your project number should replace the placeholder in the file `app/gradle.properties`, for example: `google_cloud_project_number = "1234567890"`
 
-[Setup a mobile app]: <https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
+[Setup a mobile app]: <https://github.com/pingidentity/pingone-mobile-sdk-android>
 [Firebase project set-up guidelines]:<https://firebase.google.com/docs/android/setup?authuser=0#register-app>
-[Obtain a SafetyNet API Key]: <https://developer.android.com/training/safetynet/attestation#obtain-api-key>
+[Setup Google Play Integrity API]: <https://developer.android.com/google/play/integrity/setup>
 [Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation>
 [Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id>
-[PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android/blob/master/README.md>
-[PingOne mobile SDK]:<https://github.com/pingidentity/pingone-customers-mobile-sdk-android>
+[PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-mobile-sdk-android/blob/master/README.md>
+[PingOne mobile SDK]:<https://github.com/pingidentity/pingone-mobile-sdk-android>
