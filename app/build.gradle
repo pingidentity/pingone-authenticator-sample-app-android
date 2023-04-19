@@ -35,24 +35,22 @@ android {
          * Warning: The greatest value Google Play allows for this field is 2100000000.
          * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
          */
-        versionCode = 15
+        versionCode = 17
         /*
          * The next variable is a string so that you can describe the app version as a
          * <major>.<minor>.<point> string, or as any other type of absolute or relative
          * version identifier. The value has no purpose other than to be displayed to users.
          */
-        versionName "1.5.1"
+        versionName "1.6.0"
 
         /*
          * This is the variable that is injected into build config, while building the application.
-         * If you want to use the Android Device Verification feature you should assign a value to
+         * If you want to use the Google Play Integrity API's you should assign a value to
          * this variable in the gradle.properties file. Access this value from the application in the
          * following way:
-         * String safetyNetApiKey = BuildConfig.API_KEY;
+         * String googleCloudProjectNumber = BuildConfig.GOOGLE_CLOUD_PROJECT_NUMBER;
          */
-        buildConfigField("String", "API_KEY", "${safetynet_api_key}")
-
-
+        buildConfigField("String", "GOOGLE_CLOUD_PROJECT_NUMBER", "${google_cloud_project_number}")
     }
 
     buildTypes {
@@ -70,7 +68,7 @@ dependencies {
      * Import the PingOne for Customers Android SDK. Get the latest version from
      * https://search.maven.org/search?q=g:com.pingidentity.pingonemfa
      */
-    implementation 'com.pingidentity.pingonemfa:android-sdk:1.8.1'
+    implementation 'com.pingidentity.pingonemfa:android-sdk:1.9.0'
 
     //Import the Firebase BoM (Bill of Materials)
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
@@ -87,9 +85,12 @@ dependencies {
 
     //Google's gSon library to build and parse JSON format
     implementation 'com.google.code.gson:gson:2.9.0'
-
+    /*
+     * Play Integrity API library
+     */
+    implementation 'com.google.android.play:integrity:1.1.0'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
