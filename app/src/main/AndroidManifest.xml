@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--In the Gradle-based build system, starting with AGP 7.3, don't set the package value in the source manifest file directly.-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pingidentity.authenticatorsampleapp"
     tools:ignore="GoogleAppIndexingWarning">
 
     <uses-feature android:name="android.hardware.camera.any" />

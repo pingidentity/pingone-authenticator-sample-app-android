@@ -1,6 +1,26 @@
 # Release Notes
 
 
+## v1.7.0 - June 29th, 2023
+Features:
+
+- Updated SDK to version 1.10.0
+- Added a mechanism to automatically rotate mobile cipher keys.
+
+Compatibility:
+
+- Dependencies are updated to their latest versions:
+    * In the 'build.gradle' file at the **project** level:
+        * 'com.android.tools.build:gradle:**7.4.2**'
+        * 'com.google.gms:google-services:**4.3.15**'
+        * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.6.0**'
+    * In the 'build.gradle' file at the **app** level:
+        * 'com.pingidentity.pingonemfa:android-sdk:**1.10.0**'
+        * 'com.google.mlkit:barcode-scanning:**17.1.0**'
+        * 'androidx.navigation:navigation-ui:**2.6.0**'
+
+
+
 ## v1.6.0 - April 19th, 2023
 Features:
 
@@ -19,7 +39,7 @@ Compatibility:
         *  'com.google.android.play:integrity:**1.1.0**'
 
 
-## v1.5.1 - Jan 9th, 2023
+## v1.5.1 - Jan 4th, 2023
 Features:
 
 - Updated SDK to version 1.8.1
@@ -194,4 +214,3 @@ Features:
 - Override usernames locally, or use names from PingOne directory.
 - Authentication flow with push notifications using biometric recognition to approve authentication.
 - Side menu with send logs option to track customer issues with support ID.
-- 

@@ -117,13 +117,15 @@ public class PairingFragment extends Fragment {
          */
 
         PingOne.pair(requireContext(), barcode, new PingOne.PingOneSDKPairingCallback() {
+            /*
+             * On successful completion of the pairing task the PairingInfo object will be returned.
+             * PingOneSDSKError object will be returned if pairing process wasn't successful
+             */
             @Override
             public void onComplete(@Nullable PairingInfo pairingInfo, @Nullable PingOneSDKError error) {
-                this.onComplete(error);
-            }
-
-            @Override
-            public void onComplete(@Nullable PingOneSDKError error) {
+                /*
+                 * Do something with PairingInfo object if needed, than check if error happened
+                 */
                 if(error == null){
                     requireActivity().runOnUiThread(() -> {
                         hideVerifyingLayout();
@@ -135,7 +137,6 @@ public class PairingFragment extends Fragment {
                         showErrorLayout(UserInterfaceUtil
                                 .handlePingOneSDKErrorMessage(requireContext(), error));
                     });
-
                 }
             }
         });
