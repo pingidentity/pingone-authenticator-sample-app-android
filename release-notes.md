@@ -39,7 +39,7 @@ Compatibility:
         *  'com.google.android.play:integrity:**1.1.0**'
 
 
-## v1.5.1 - Jan 9th, 2023
+## v1.5.1 - Jan 4th, 2023
 Features:
 
 - Updated SDK to version 1.8.1
