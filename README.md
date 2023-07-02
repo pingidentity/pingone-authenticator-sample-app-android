@@ -1,6 +1,6 @@
 # Authenticator sample app
 
-This sample application demonstrates an authenticator-only application that uses PingOne for Customers mobile SDK. An Android developer can easily build a branded and customized Authenticator application using this sample.
+This sample application demonstrates an authenticator-only application that uses PingOne MFA mobile SDK. An Android developer can easily build a branded and customized Authenticator application using this sample.
 
 ## What’s in the sample app?
 
@@ -65,7 +65,7 @@ At this point you can build and run the app.
    It is mandatory to replace these images before submitting the application to Google Play, in order to create a unique app complying with Google's restrictions. For more information, refer to [Google Play Impersonation and Intellectual Property Guidelines].
 
 3. If needed, update the `app/src/main/res/values/strings.xml` file, to customize any string in the application.
-##### Note: For further understanding the code implementation of this app, refer to [Setup a mobile app] using the PingOne SDK sample code.
+##### Note: For further understanding the code implementation of this app, refer to [Setup a mobile app] using the PingOne MFA SDK sample code.
 
 
 ## Device Integrity validation
@@ -78,5 +78,5 @@ Your project number should replace the placeholder in the file `app/gradle.prope
 [Setup Google Play Integrity API]: <https://developer.android.com/google/play/integrity/setup>
 [Google Play Impersonation and Intellectual Property Guidelines]:<https://play.google.com/about/ip-impersonation/impersonation>
 [Android applicationId guidelines]:<https://developer.android.com/studio/build/application-id>
-[PingOne mobile SDK Android README]:<https://github.com/pingidentity/pingone-mobile-sdk-android/blob/master/README.md>
-[PingOne mobile SDK]:<https://github.com/pingidentity/pingone-mobile-sdk-android>
+[PingOne MFA mobile SDK Android README]:<https://github.com/pingidentity/pingone-mobile-sdk-android/blob/master/README.md>
+[PingOne MFA mobile SDK]:<https://github.com/pingidentity/pingone-mobile-sdk-android>
