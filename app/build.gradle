@@ -12,7 +12,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     /*
      * The namespace is initially set to the package name you choose when you create your project.
@@ -34,7 +34,7 @@ android {
          */
         applicationId "com.pingidentity.authenticatorsampleapp"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
         /*
          * Next value is a positive integer so that other apps can programmatically evaluate it,
          * for example to check an upgrade or downgrade relationship. You can set the value to any
@@ -44,13 +44,13 @@ android {
          * Warning: The greatest value Google Play allows for this field is 2100000000.
          * For more info visit: https://developer.android.com/studio/publish/versioning#appversioning
          */
-        versionCode = 19
+        versionCode = 23
         /*
          * The next variable is a string so that you can describe the app version as a
          * <major>.<minor>.<point> string, or as any other type of absolute or relative
          * version identifier. The value has no purpose other than to be displayed to users.
          */
-        versionName "1.7.0"
+        versionName "1.8.0"
 
         /*
          * This is the variable that is injected into build config, while building the application.
@@ -77,12 +77,21 @@ dependencies {
      * Import the PingOne for Customers Android SDK. Get the latest version from
      * https://search.maven.org/search?q=g:com.pingidentity.pingonemfa
      */
-    implementation 'com.pingidentity.pingonemfa:android-sdk:1.10.0'
+    implementation 'com.pingidentity.pingonemfa:android-sdk:1.11.0'
 
-    //Import the Firebase BoM (Bill of Materials)
-    implementation platform('com.google.firebase:firebase-bom:26.3.0')
+    /*
+     * Import the Firebase BoM (Bill of Materials).
+     * A BOM is a special kind of POM file that is used to centralize the version information of
+     * multiple }
+dependencies. It doesn't contain any actual code, but it specifies the versions of
+     * }
+dependencies that are known to work together.
+     * The BOM helps to ensure that the versions of }
+dependencies you're using are known to be
+     * compatible with each other, reducing the risk of version conflicts.
+     */
+    implementation platform('com.google.firebase:firebase-bom:32.2.3')
     //FireCloud Messaging Services
-    implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-messaging'
 
     /*
@@ -90,19 +99,19 @@ dependencies {
      * ML Kit's APIs all run on-device, allowing for real-time use cases where you want to process
      * a live camera stream. This also means that the functionality is available offline.
      */
-    implementation 'com.google.mlkit:barcode-scanning:17.1.0'
+    implementation 'com.google.mlkit:barcode-scanning:17.2.0'
 
     //Google's gSon library to build and parse JSON format
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
     /*
      * Play Integrity API library
      */
-    implementation 'com.google.android.play:integrity:1.1.0'
+    implementation 'com.google.android.play:integrity:1.2.0'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment:2.5.3'
-    implementation 'androidx.navigation:navigation-ui:2.6.0'
+    implementation 'androidx.navigation:navigation-fragment:2.7.3'
+    implementation 'androidx.navigation:navigation-ui:2.7.3'
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
 
     /*
