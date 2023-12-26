@@ -77,7 +77,7 @@ dependencies {
      * Import the PingOne for Customers Android SDK. Get the latest version from
      * https://search.maven.org/search?q=g:com.pingidentity.pingonemfa
      */
-    implementation 'com.pingidentity.pingonemfa:android-sdk:1.11.0-3-SNAPSHOT'
+    implementation 'com.pingidentity.pingonemfa:android-sdk:1.11.0-SNAPSHOT'
 
     /*
      * Import the Firebase BoM (Bill of Materials).
