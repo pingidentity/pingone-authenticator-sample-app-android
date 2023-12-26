@@ -1,5 +1,26 @@
 # Release Notes
 
+## v1.8.0 - December 24th, 2023
+Features:
+
+- Updated SDK to version 1.11.0
+
+Compatibility:
+
+- Android **target** SDK version is updated to API level 34 (Android 14)
+- Dependencies are updated to their latest versions:
+    * In the 'build.gradle' file at the **project** level:
+        * 'com.android.tools.build:gradle:**8.1.1**'
+        * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.7.2**'
+    * In the 'build.gradle' file at the **app** level:
+        * 'com.google.firebase:firebase-bom:**26.3.0**'
+        * Removed 'com.google.firebase:firebase-core'
+        * 'com.google.mlkit:barcode-scanning:**17.2.0**'
+        * 'com.google.code.gson:gson:**2.10.1**'
+        * 'com.google.android.play:integrity:**1.2.0**'
+        * 'androidx.navigation:navigation-fragment:**2.7.3**'
+        * 'androidx.navigation:navigation-ui:**2.7.3**'
+
 
 ## v1.7.0 - June 29th, 2023
 Features:
@@ -39,7 +60,7 @@ Compatibility:
         *  'com.google.android.play:integrity:**1.1.0**'
 
 
-## v1.5.1 - Jan 9th, 2023
+## v1.5.1 - Jan 4th, 2023
 Features:
 
 - Updated SDK to version 1.8.1
