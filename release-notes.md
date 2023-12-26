@@ -13,7 +13,7 @@ Compatibility:
         * 'com.android.tools.build:gradle:**8.1.1**'
         * 'androidx.navigation:navigation-safe-args-gradle-plugin:**2.7.2**'
     * In the 'build.gradle' file at the **app** level:
-        * 'com.google.firebase:firebase-bom:**26.3.0**'
+        * 'com.google.firebase:firebase-bom:**32.2.3**'
         * Removed 'com.google.firebase:firebase-core'
         * 'com.google.mlkit:barcode-scanning:**17.2.0**'
         * 'com.google.code.gson:gson:**2.10.1**'
