@@ -25,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:textSize="14sp"
-                android:textAppearance="@font/proxima_nova_regular"
                 android:textColor="@color/color_light_grey_borders"
                 android:textStyle="normal"
                 android:layout_alignParentEnd="true"
@@ -38,7 +37,6 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
                 android:textSize="12sp"
-                android:textAppearance="@font/proxima_nova_regular"
                 android:textStyle="normal"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"/>
@@ -134,7 +132,6 @@
                         android:textColor="@color/color_title_text_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@font/proxima_nova_regular"
                         android:text="@string/main_view_accounts_title"/>
 
                     <View

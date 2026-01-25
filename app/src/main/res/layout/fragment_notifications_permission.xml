@@ -68,7 +68,6 @@
                 android:textColor="@color/color_title_text_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@font/proxima_nova_regular"
                 android:text="@string/notifications_permission_title"/>
             <TextView
                 android:id="@+id/text_view_notification_subtitle"
@@ -79,7 +78,6 @@
                 android:layout_marginBottom="5dp"
                 android:padding="5dp"
                 android:textSize="13sp"
-                android:textAppearance="@font/proxima_nova_regular"
                 android:textColor="@color/color_title_text_color"/>
             <Button
                 android:id="@+id/button_enable_notifications"

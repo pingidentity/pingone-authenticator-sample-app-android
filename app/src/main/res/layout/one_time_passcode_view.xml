@@ -28,7 +28,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textColor="@color/otp_view_passcode"
-        android:fontFamily="@font/proxima_nova_regular"
         android:textSize="50dp"
         android:letterSpacing="0.2"/>
 

@@ -17,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textAppearance="@font/proxima_nova_regular"
         android:padding="10dp"
         android:textSize="22sp"
         android:textColor="@color/color_main_background_white"

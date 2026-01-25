@@ -20,6 +20,5 @@
         android:padding="10dp"
         android:textSize="22sp"
         android:textColor="@color/color_main_background_white"
-        android:textAppearance="@font/proxima_nova_regular"
         android:text="@string/auth_timeout_layout_message"/>
 </RelativeLayout>
