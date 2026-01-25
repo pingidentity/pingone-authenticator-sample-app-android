@@ -19,8 +19,6 @@
         android:layout_centerInParent="true"
         android:padding="10dp"
         android:textSize="22sp"
-        android:textAppearance="@font/proxima_nova_regular"
-
         android:textColor="@color/color_main_background_white"
         android:text="@string/auth_success_layout_message"/>
 </RelativeLayout>

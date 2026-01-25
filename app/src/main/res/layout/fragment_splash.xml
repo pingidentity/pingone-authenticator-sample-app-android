@@ -19,7 +19,6 @@
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/splash_screen_app_title"
-        android:textAppearance="@font/proxima_nova_regular"
         android:textSize="22sp"
         android:text="Authenticator Sample Application"
         android:layout_width="wrap_content"
